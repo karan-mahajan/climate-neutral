@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+input {
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 30px;
+}
+
+select {
+    appearance: none;
+    /* safari */
+    -webkit-appearance: none;
+    /* other styles for aesthetics */
+    width: 100%;
+    font-size: 1.15rem;
+    padding: 2px;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+    cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+table {
+    margin: 20px auto;
+}
+
+th {
+    padding-bottom: 15px;
+    color: white;
+}
+
+td {
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
+.table-container {
+    padding: 10px;
+    background-color: #0c1c81;
+}
+
+.add-row {
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    float: right;
+    margin-right: 25px;
+}
+
+.add-row:hover {
+    background-color: #45a049;
+}
+
+.save-data {
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+    margin-right: 25px;
+}
+
+.load-data {
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-right: 25px;
+    display: inline-block;
+}
+
+/* Hover effect for the button */
+.load-button:hover {
+    background-color: #45a049;
+}
+
+/* Style for the hidden file input */
+.file-input {
+    display: none;
+}
+
+.chart {
+    margin-top: 60px;
+}
+
+.green-wizard {
+    display: flex;
+    flex-direction: column;
+    background-color: #26b170;
+    color: white;
+    max-width: 700px;
+}
+
+.green-wizard-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 15px;
+}
+
+.green-wizard-container {
+    display: flex;
+    margin: 10px 15px;
+}
+
+.green-wizard-result {
+    flex: 0.7;
+}
+
+.green-wizard-result>p {
+    margin: 0;
+}
+
+.dropdown-container {
+    margin-inline: 20px;
+}
+
+.green-wizard-dropdown-container {
+    flex: 0.3;
+}
