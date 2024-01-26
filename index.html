@@ -4,13 +4,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Climate Neutral App</title>
     <script src="./resources/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
     <link href="./resources/index.css" type="text/css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 
 <body>
-    <h1>Welcome to the project</h1>
+    <div class="container">
+        <div>
+            <div class="table-container">
+                <div>
+                    <label for="fileInput" class="load-data">Load Data</label>
+                    <input type="file" id="fileInput" class="file-input" accept=".json" onchange="loadData(this.files)">
+                    <button class="save-data" onclick="saveData()">Save Data</button>
+                </div>
+                <table id="user-details-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Year</th>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Annual VKT</th>
+                            <th>Fuel Type</th>
+                            <th>Flex-Fuel</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" name="description11"></td>
+                            <td><input type="text" name="type12"></td>
+                            <td><input type="number" name="year13"></td>
+                            <td><input type="text" name="make14"></td>
+                            <td><input type="text" name="model15"></td>
+                            <td><input type="number" name="annual-vkt16"></td>
+                            <td><input type="text" name="fuel-type17"></td>
+                            <td><input type="text" name="flex-fuel18"></td>
+                            <td><input type="number" name="quantity19"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button class="add-row" onclick="addNewRow()">Add New Row</button>
+            <button class="add-row" onclick="calculate()">Calculate</button>
+        </div>
+        <div class="container chart">
+            <div class="green-wizard">
+                <div class="green-wizard-header">
+                    <span>
+                        Fleet Vehicle
+                    </span>
+                    <span>
+                        Green Option
+                    </span>
+                </div>
+                <div class="green-wizard-container">
+                    <div class="green-wizard-result">
+                        <p for="result1">Maintaince 1 - Light Dutytruck - 2018 - Ford - F-150</h1>
+                    </div>
+                    <div class="green-wizard-dropdown-container">
+                        <div class="dropdown-container">
+                            <div class="dropdown">
+                                <select id="result1">
+                                    <option value="option1">Option 1</option>
+                                    <option value="option2">Option 2</option>
+                                    <option value="option3">Option 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="green-wizard-container">
+                    <div class="green-wizard-result">
+                        <p for="result2">Maintaince 1 - Light Dutytruck - 2018 - Ford - F-150</h1>
+                    </div>
+                    <div class="green-wizard-dropdown-container">
+                        <div class="dropdown-container">
+                            <div class="dropdown">
+                                <select id="result2">
+                                    <option value="option1">Option 1</option>
+                                    <option value="option2">Option 2</option>
+                                    <option value="option3">Option 3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
