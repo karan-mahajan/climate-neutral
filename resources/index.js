@@ -21,3 +21,34 @@ const addNewRow = () => {
     cell8.innerHTML = '<input type="text" name="flex-fuel' + nextRow + '8">';
     cell9.innerHTML = '<input type="text" name="quantity' + nextRow + '9">';
 }
+
+
+const saveData = () => {
+    var table = document.getElementById("user-details-table")
+    var data = [];
+    var isValid = true;
+    for (var i = 1; i < table.rows.length; i++) {
+        var rowData = {};
+        for (var j = 1; j <= 9; j++) {
+            var input = table.rows[i].cells[j - 1].querySelector('input');
+            if (!input.value) {
+                isValid = false;
+            }
+            rowData[input.name] = input.value;
+        }
+        if (!isValid) {
+            alert('Please provide all the values');
+            break;
+        }
+        data.push(rowData);
+    }
+
+    if (isValid) {
+        var jsonData = JSON.stringify(data, null, 2);
+        var blob = new Blob([jsonData], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'saved_data.json';
+        a.click();
+    }
+}
