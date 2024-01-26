@@ -52,3 +52,29 @@ const saveData = () => {
         a.click();
     }
 }
+const loadData = () => {
+    var fileInput = document.getElementById('fileInput');
+    var file = fileInput.files[0];
+
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var data = JSON.parse(e.target.result);
+            var table = document.getElementById("user-details-table")
+            // Clearing the existing values
+            table.innerHTML = '<tr><th>Description</th><th>Type</th><th>Year</th><th>Make</th><th>Model</th><th>Annual VKT</th><th>Fuel Type</th><th>Flex-Fuel</th><th>Quantity</th></tr > ';
+
+            // Populating data
+            for (var i = 0; i < data.length; i++) {
+                var newRow = table.insertRow(table.rows.length);
+                for (var j = 1; j <= 9; j++) {
+                    var cell = newRow.insertCell(j - 1);
+                    console.log(data[i], cell);
+                    cell.innerHTML = '<input type="text" name="data' + (i + 1) + j + '" value="' + data[i]['Column' + j] + '">';
+                }
+            }
+        };
+
+        reader.readAsText(file);
+    }
+}
