@@ -78,3 +78,31 @@ const loadData = () => {
         reader.readAsText(file);
     }
 }
+
+
+const calculate = () => {
+    var table = document.getElementById("user-details-table")
+    var data = [];
+    var isValid = true;
+    for (var i = 1; i < table.rows.length; i++) {
+        var rowData = {};
+        for (var j = 1; j <= 9; j++) {
+            var input = table.rows[i].cells[j - 1].querySelector('input');
+            if (!input.value) {
+                isValid = false;
+                break;
+            }
+            rowData[input.name] = input.value;
+        }
+        data.push(rowData);
+    }
+    if (isValid) {
+        console.log(data);
+        data.map((val) => {
+
+        })
+    }
+    else {
+        alert('Please provide all the values');
+    }
+}
