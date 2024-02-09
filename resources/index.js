@@ -15,6 +15,17 @@ const startCar = () => {
     car.style.animationPlayState = 'running';
 }
 
+const displayConsumptionIntensity = () => {
+    const selectedProvince = document.querySelector('.province-select-type').value;
+    const selectedData = provinceData.find(data => data.province === selectedProvince);
+
+    if (selectedData) {
+        const consumptionIntensityElement = document.querySelector('.province-value');
+        consumptionIntensityElement.textContent = `${selectedData.consumptionIntensity} g CO2e/kWh`;
+        localStorage.setItem("intensity", selectedData.consumptionIntensity);
+    }
+}
+
 const fetchEmissionCoefficient = () => {
     fetch('https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/output-based-pricing-system/federal-greenhouse-gas-offset-system/emission-factors-reference-values.html')
         .then(response => response.text())
