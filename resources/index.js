@@ -1,3 +1,6 @@
+const provinceData = [];
+const userData = [];
+
 const startCar = () => {
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
@@ -10,6 +13,45 @@ const startCar = () => {
     var car = document.querySelector('.car');
     // car.style.animation = 'run 10s linear infinite';
     car.style.animationPlayState = 'running';
+}
+
+const fetchEmissionCoefficient = () => {
+    fetch('https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/output-based-pricing-system/federal-greenhouse-gas-offset-system/emission-factors-reference-values.html')
+        .then(response => response.text())
+        .then(htmlResponse => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlResponse, 'text/html');
+
+            const table = doc.querySelector('#table_6');
+            const rows = table.querySelectorAll('tbody tr');
+
+
+            rows.forEach(row => {
+                const columns = row.querySelectorAll('th, td');
+                const province = columns[0].textContent.trim();
+                const consumptionIntensity = parseFloat(columns[1].textContent.trim());
+
+                provinceData.push({ province, consumptionIntensity });
+            });
+
+            const selectElement = document.querySelector('.province-select-type');
+            provinceData.forEach(province => {
+                const option = document.createElement('option');
+                option.value = province.province;
+                option.textContent = province.province;
+                selectElement.appendChild(option);
+            });
+            selectElement.value = 'Ontario'
+            const selectedData = provinceData.find(data => data.province === 'Ontario');
+
+            if (selectedData) {
+                const consumptionIntensityElement = document.querySelector('.province-value');
+                consumptionIntensityElement.textContent = `${selectedData.consumptionIntensity} g CO2e/kWh`;
+                localStorage.setItem("intensity", selectedData.consumptionIntensity);
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
 }
 
 const addNewRow = () => {
