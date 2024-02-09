@@ -54,6 +54,31 @@ const fetchEmissionCoefficient = () => {
 
 }
 
+window.onscroll = function () { scrollFunction() };
+
+function scrollFunction() {
+    const topButton = document.querySelector("#gototop");
+    const header = document.querySelector(".header");
+    const sticky = header.offsetTop;
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        topButton.style.display = "block";
+    } else {
+        topButton.style.display = "none";
+    }
+}
+
+const goToTop = () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    var table = document.getElementById("user-details-table");
+
+
+
+    // Clearing the existing values
+    table.innerHTML = '<tr><th>Description</th><th>Type</th><th>Year</th><th>Make</th><th>Model</th><th>Annual VKT</th><th>Annual Fuel</th><th>Fuel Type</th><th>Flex-Fuel</th><th>Quantity</th></tr > ';
+    addNewRow();
+}
+
 const addNewRow = () => {
     var table = document.getElementById("user-details-table");
     var newRow = table.insertRow(table.rows.length);
