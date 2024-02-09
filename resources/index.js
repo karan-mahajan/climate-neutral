@@ -1,3 +1,17 @@
+const startCar = () => {
+    const loader = document.getElementById("loader-wrapper");
+    loader.style.display = 'flex';
+    const start = document.querySelector('.start-car');
+    const table = document.querySelector('.table-cont');
+    table.classList.remove('display-none');
+    table.scrollIntoView();
+    fetchEmissionCoefficient();
+    loader.style.display = 'none';
+    var car = document.querySelector('.car');
+    // car.style.animation = 'run 10s linear infinite';
+    car.style.animationPlayState = 'running';
+}
+
 const addNewRow = () => {
     var table = document.getElementById("user-details-table");
     var newRow = table.insertRow(table.rows.length);
