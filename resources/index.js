@@ -15,6 +15,17 @@ const startCar = () => {
     car.style.animationPlayState = 'running';
 }
 
+const displayConsumptionIntensity = () => {
+    const selectedProvince = document.querySelector('.province-select-type').value;
+    const selectedData = provinceData.find(data => data.province === selectedProvince);
+
+    if (selectedData) {
+        const consumptionIntensityElement = document.querySelector('.province-value');
+        consumptionIntensityElement.textContent = `${selectedData.consumptionIntensity} g CO2e/kWh`;
+        localStorage.setItem("intensity", selectedData.consumptionIntensity);
+    }
+}
+
 const fetchEmissionCoefficient = () => {
     fetch('https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/output-based-pricing-system/federal-greenhouse-gas-offset-system/emission-factors-reference-values.html')
         .then(response => response.text())
@@ -271,30 +282,177 @@ const loadData = () => {
     document.querySelector('.calculate').scrollIntoView();
 }
 
+const calculateOptions = (userValues) => {
+    const type = getTypeValue(userValues);
+    const flexFuel = getFlexFuelValue(userValues);
+    const fuelType = getFuelTypeValue(userValues);
+    if (type === 'Car' && flexFuel === 'Yes' && fuelType === 'Gasoline') {
+        return ['Replace w/ EV Vehicle', 'E85 Ethanol Usage'];
+    }
+    else if (type === 'Car' && flexFuel === 'No' && fuelType === 'Gasoline') {
+        return ['Replace w/ EV Car', 'Replace w/ Biofuel Car E85'];
+    }
+    else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Gasoline') {
+        return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel Car'];
+    }
+    else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Diesel') {
+        return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
+    }
+    else if (type === 'Light Duty Truck' && flexFuel === 'Yes' && fuelType === 'Diesel') {
+        return ['B20 Diesel Usage', 'Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
+    }
+    else {
+        return ['Replace w/ EV Vehicle', 'Right-size to smaller vehicle', 'E85 Ethanol Usage', 'B20 Biodiesel Usage', 'Replace w/ Biofuel car', 'Replace w/ Biofuel Truck', 'Nothing'];
+    }
+}
 
 const calculate = () => {
+    const loader = document.getElementById("loader-wrapper");
+    loader.style.display = 'flex';
     var table = document.getElementById("user-details-table")
     var data = [];
     var isValid = true;
     for (var i = 1; i < table.rows.length; i++) {
         var rowData = {};
-        for (var j = 1; j <= 9; j++) {
+        for (var j = 1; j <= 10; j++) {
             var input = table.rows[i].cells[j - 1].querySelector('input');
-            if (!input.value) {
-                isValid = false;
-                break;
+            var select = table.rows[i].cells[j - 1].querySelector('select');
+            if (input) {
+                if (!input.value) {
+                    isValid = false;
+                }
+                rowData[input.name] = input.value;
             }
-            rowData[input.name] = input.value;
+            else {
+                rowData[select.name] = select.value;
+            }
         }
         data.push(rowData);
+        userData.push(rowData);
     }
+    // userData.push([...data]);
     if (isValid) {
-        console.log(data);
+        const greenOptionsWizard = []
+        var i = 0;
+        const greenWizardContainer = document.querySelector('.green-wizard-container');
+        if (greenWizardContainer) {
+            greenWizardContainer.remove();
+        }
         data.map((val) => {
-
-        })
+            greenOptionsWizard[i] = `${getDescriptionValue(val)} - ${getTypeValue(val)} - ${getYearValue(val)} - ${getMakeValue(val)} - ${getModelValue(val)}`
+            const options = calculateOptions(val);
+            addGreenWizardContainer(greenOptionsWizard[i], options, i);
+            i++;
+        });
+        const greenWizard = document.querySelector('.green-wizard');
+        greenWizard.style.display = "flex";
+        greenWizard.scrollIntoView();
     }
     else {
         alert('Please provide all the values');
+    }
+    loader.style.display = 'none';
+}
+
+const addGreenWizardContainer = (resultText, options, index) => {
+    var container = document.createElement('div');
+    container.classList.add('green-wizard-container');
+
+    var resultElement = document.createElement('div');
+    resultElement.classList.add('green-wizard-result');
+    resultElement.innerHTML = `<p for="result${index}">` + resultText + '</p>';
+
+    var dropdownContainer = document.createElement('div');
+    dropdownContainer.classList.add('green-wizard-dropdown-container');
+
+    var dropdown = document.createElement('div');
+    dropdown.classList.add('dropdown');
+
+    var select = document.createElement('select');
+    select.id = `result${index}`;
+
+    options.forEach(function (option, index) {
+        var optionElement = document.createElement('option');
+        optionElement.value = option
+        optionElement.textContent = option;
+        select.appendChild(optionElement);
+    });
+
+    dropdown.appendChild(select);
+    dropdownContainer.appendChild(dropdown);
+
+    container.appendChild(resultElement);
+    container.appendChild(dropdownContainer);
+
+    document.getElementsByClassName('green-wizard')[0].appendChild(container);
+    document.querySelector('.btn-emission-result').style.display = 'block'
+}
+
+const getDescriptionValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('description')) {
+            return value[property]
+        }
+    }
+}
+const getTypeValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('type')) {
+            return value[property]
+        }
+    }
+}
+const getYearValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('year')) {
+            return value[property]
+        }
+    }
+}
+const getMakeValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('make')) {
+            return value[property]
+        }
+    }
+}
+
+const getModelValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('model')) {
+            return value[property]
+        }
+    }
+}
+
+const getFlexFuelValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('flex-fuel')) {
+            return value[property]
+        }
+    }
+}
+
+const getFuelTypeValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('fuel-type')) {
+            return value[property]
+        }
+    }
+}
+
+const getAnnualFuelValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('annual-fuel')) {
+            return value[property]
+        }
+    }
+}
+
+const getAnnualKmValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('annual-vkt')) {
+            return value[property]
+        }
     }
 }
