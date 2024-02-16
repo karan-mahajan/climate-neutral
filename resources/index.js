@@ -1,6 +1,10 @@
 const provinceData = [];
 const userData = [];
 
+/**
+ * The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
+ * loader, and starts an animation for a car.
+ */
 const startCar = () => {
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
@@ -15,6 +19,11 @@ const startCar = () => {
     car.style.animationPlayState = 'running';
 }
 
+/**
+ * The function `displayConsumptionIntensity` retrieves the selected province from a dropdown menu,
+ * finds the corresponding data for that province, and updates the DOM with the consumption intensity
+ * value for that province.
+ */
 const displayConsumptionIntensity = () => {
     const selectedProvince = document.querySelector('.province-select-type').value;
     const selectedData = provinceData.find(data => data.province === selectedProvince);
@@ -26,6 +35,10 @@ const displayConsumptionIntensity = () => {
     }
 }
 
+/**
+ * The function fetches emission coefficients for different provinces in Canada from a website and
+ * populates a select element with the province names, and sets the default value to Ontario.
+ */
 const fetchEmissionCoefficient = () => {
     fetch('https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/output-based-pricing-system/federal-greenhouse-gas-offset-system/emission-factors-reference-values.html')
         .then(response => response.text())
@@ -67,6 +80,10 @@ const fetchEmissionCoefficient = () => {
 
 window.onscroll = function () { scrollFunction() };
 
+/**
+ * The scrollFunction checks if the user has scrolled down a certain distance and displays or hides a
+ * "go to top" button accordingly.
+ */
 function scrollFunction() {
     const topButton = document.querySelector("#gototop");
     const header = document.querySelector(".header");
@@ -78,18 +95,22 @@ function scrollFunction() {
     }
 }
 
+/**
+ * The function `goToTop` scrolls the page to the top, clears the content of a table with the id
+ * "user-details-table", and adds a new row to the table.
+ */
 const goToTop = () => {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     var table = document.getElementById("user-details-table");
-
-
-
     // Clearing the existing values
     table.innerHTML = '<tr><th>Description</th><th>Type</th><th>Year</th><th>Make</th><th>Model</th><th>Annual VKT</th><th>Annual Fuel</th><th>Fuel Type</th><th>Flex-Fuel</th><th>Quantity</th></tr > ';
     addNewRow();
 }
 
+/**
+ * The function `addNewRow` adds a new row to a table with input fields and dropdown menus.
+ */
 const addNewRow = () => {
     var table = document.getElementById("user-details-table");
     var newRow = table.insertRow(table.rows.length);
@@ -130,6 +151,10 @@ const addNewRow = () => {
 }
 
 
+/**
+ * The `saveData` function retrieves data from an HTML table, validates it, and then downloads it as a
+ * JSON file if all values are provided.
+ */
 const saveData = () => {
     var table = document.getElementById("user-details-table")
     var data = [];
@@ -160,6 +185,9 @@ const saveData = () => {
     }
 }
 
+/**
+ * The `loadData` function reads a JSON file, parses its contents, and populates a table with the data.
+ */
 const loadData = () => {
     var fileInput = document.getElementById('fileInput');
     var file = fileInput.files[0];
