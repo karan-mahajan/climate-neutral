@@ -436,6 +436,12 @@ const addGreenWizardContainer = (resultText, options, index) => {
     document.querySelector('.btn-emission-result').style.display = 'block'
 }
 
+/**
+ * The function `getDescriptionValue` returns the value of the first property in an object that starts
+ * with the string "description".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'description' in the given object.
+ */
 const getDescriptionValue = (value) => {
     for (const property in value) {
         if (property.startsWith('description')) {
@@ -443,6 +449,14 @@ const getDescriptionValue = (value) => {
         }
     }
 }
+
+
+/**
+ * The function `getTypeValue` returns the value of the property that starts with 'type' in the given
+ * object.
+ * @param value - The `value` parameter is the object that we want to extract the value from.
+ * @returns The value of the property that starts with 'type' in the given object.
+ */
 const getTypeValue = (value) => {
     for (const property in value) {
         if (property.startsWith('type')) {
@@ -450,6 +464,14 @@ const getTypeValue = (value) => {
         }
     }
 }
+
+
+/**
+ * The function `getYearValue` returns the value of the first property in an object that starts with
+ * the word "year".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'year' in the given object.
+ */
 const getYearValue = (value) => {
     for (const property in value) {
         if (property.startsWith('year')) {
@@ -457,6 +479,14 @@ const getYearValue = (value) => {
         }
     }
 }
+
+
+/**
+ * The function `getMakeValue` returns the value of the first property in an object that starts with
+ * the string "make".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'make' in the given object.
+ */
 const getMakeValue = (value) => {
     for (const property in value) {
         if (property.startsWith('make')) {
@@ -464,6 +494,12 @@ const getMakeValue = (value) => {
         }
     }
 }
+/**
+ * The function `getModelValue` returns the value of the first property in an object that starts with
+ * the string "model".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'model' is being returned.
+ */
 
 const getModelValue = (value) => {
     for (const property in value) {
@@ -473,6 +509,12 @@ const getModelValue = (value) => {
     }
 }
 
+/**
+ * The function `getFlexFuelValue` returns the value of the first property in an object that starts
+ * with 'flex-fuel'.
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'flex-fuel' is being returned.
+ */
 const getFlexFuelValue = (value) => {
     for (const property in value) {
         if (property.startsWith('flex-fuel')) {
@@ -481,6 +523,12 @@ const getFlexFuelValue = (value) => {
     }
 }
 
+/**
+ * The function `getFuelTypeValue` returns the value of the property that starts with 'fuel-type' from
+ * the given object.
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'fuel-type' is being returned.
+ */
 const getFuelTypeValue = (value) => {
     for (const property in value) {
         if (property.startsWith('fuel-type')) {
@@ -489,6 +537,12 @@ const getFuelTypeValue = (value) => {
     }
 }
 
+/**
+ * The function `getAnnualFuelValue` returns the value of the first property in the given object that
+ * starts with "annual-fuel".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'annual-fuel' is being returned.
+ */
 const getAnnualFuelValue = (value) => {
     for (const property in value) {
         if (property.startsWith('annual-fuel')) {
@@ -497,6 +551,12 @@ const getAnnualFuelValue = (value) => {
     }
 }
 
+/**
+ * The function `getAnnualKmValue` returns the value of the first property in the `value` object that
+ * starts with "annual-vkt".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'annual-vkt' is being returned.
+ */
 const getAnnualKmValue = (value) => {
     for (const property in value) {
         if (property.startsWith('annual-vkt')) {
