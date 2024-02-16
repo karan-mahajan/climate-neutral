@@ -1,6 +1,10 @@
 const provinceData = [];
 const userData = [];
 
+/**
+ * The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
+ * loader, and starts an animation for a car.
+ */
 const startCar = () => {
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
@@ -15,6 +19,11 @@ const startCar = () => {
     car.style.animationPlayState = 'running';
 }
 
+/**
+ * The function `displayConsumptionIntensity` retrieves the selected province from a dropdown menu,
+ * finds the corresponding data for that province, and updates the DOM with the consumption intensity
+ * value for that province.
+ */
 const displayConsumptionIntensity = () => {
     const selectedProvince = document.querySelector('.province-select-type').value;
     const selectedData = provinceData.find(data => data.province === selectedProvince);
@@ -26,6 +35,10 @@ const displayConsumptionIntensity = () => {
     }
 }
 
+/**
+ * The function fetches emission coefficients for different provinces in Canada from a website and
+ * populates a select element with the province names, and sets the default value to Ontario.
+ */
 const fetchEmissionCoefficient = () => {
     fetch('https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/output-based-pricing-system/federal-greenhouse-gas-offset-system/emission-factors-reference-values.html')
         .then(response => response.text())
@@ -67,6 +80,10 @@ const fetchEmissionCoefficient = () => {
 
 window.onscroll = function () { scrollFunction() };
 
+/**
+ * The scrollFunction checks if the user has scrolled down a certain distance and displays or hides a
+ * "go to top" button accordingly.
+ */
 function scrollFunction() {
     const topButton = document.querySelector("#gototop");
     const header = document.querySelector(".header");
@@ -78,18 +95,22 @@ function scrollFunction() {
     }
 }
 
+/**
+ * The function `goToTop` scrolls the page to the top, clears the content of a table with the id
+ * "user-details-table", and adds a new row to the table.
+ */
 const goToTop = () => {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     var table = document.getElementById("user-details-table");
-
-
-
     // Clearing the existing values
     table.innerHTML = '<tr><th>Description</th><th>Type</th><th>Year</th><th>Make</th><th>Model</th><th>Annual VKT</th><th>Annual Fuel</th><th>Fuel Type</th><th>Flex-Fuel</th><th>Quantity</th></tr > ';
     addNewRow();
 }
 
+/**
+ * The function `addNewRow` adds a new row to a table with input fields and dropdown menus.
+ */
 const addNewRow = () => {
     var table = document.getElementById("user-details-table");
     var newRow = table.insertRow(table.rows.length);
@@ -130,6 +151,10 @@ const addNewRow = () => {
 }
 
 
+/**
+ * The `saveData` function retrieves data from an HTML table, validates it, and then downloads it as a
+ * JSON file if all values are provided.
+ */
 const saveData = () => {
     var table = document.getElementById("user-details-table")
     var data = [];
@@ -160,6 +185,9 @@ const saveData = () => {
     }
 }
 
+/**
+ * The `loadData` function reads a JSON file, parses its contents, and populates a table with the data.
+ */
 const loadData = () => {
     var fileInput = document.getElementById('fileInput');
     var file = fileInput.files[0];
@@ -282,6 +310,12 @@ const loadData = () => {
     document.querySelector('.calculate').scrollIntoView();
 }
 
+/**
+ * The function calculates options based on user values for type, flex fuel, and fuel type.
+ * @param userValues - An object containing the user's input values for the type of vehicle, whether it
+ * is flex fuel capable, and the fuel type.
+ * @returns An array of options based on the user values.
+ */
 const calculateOptions = (userValues) => {
     const type = getTypeValue(userValues);
     const flexFuel = getFlexFuelValue(userValues);
@@ -306,6 +340,10 @@ const calculateOptions = (userValues) => {
     }
 }
 
+/**
+ * The `calculate` function retrieves data from a table, validates it, and then performs calculations
+ * based on the data.
+ */
 const calculate = () => {
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
@@ -354,6 +392,16 @@ const calculate = () => {
     loader.style.display = 'none';
 }
 
+/**
+ * The function `addGreenWizardContainer` creates a container element with a result text and a dropdown
+ * menu, and appends it to a specific element on the page.
+ * @param resultText - The `resultText` parameter is a string that represents the text to be displayed
+ * in the result element of the green wizard container.
+ * @param options - An array of options for the dropdown menu. Each option should be a string.
+ * @param index - The `index` parameter is used to uniquely identify each green wizard container. It is
+ * typically used when creating the `id` attribute for the select element, as well as when creating the
+ * `for` attribute for the result element.
+ */
 const addGreenWizardContainer = (resultText, options, index) => {
     var container = document.createElement('div');
     container.classList.add('green-wizard-container');
@@ -388,6 +436,12 @@ const addGreenWizardContainer = (resultText, options, index) => {
     document.querySelector('.btn-emission-result').style.display = 'block'
 }
 
+/**
+ * The function `getDescriptionValue` returns the value of the first property in an object that starts
+ * with the string "description".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'description' in the given object.
+ */
 const getDescriptionValue = (value) => {
     for (const property in value) {
         if (property.startsWith('description')) {
@@ -395,6 +449,14 @@ const getDescriptionValue = (value) => {
         }
     }
 }
+
+
+/**
+ * The function `getTypeValue` returns the value of the property that starts with 'type' in the given
+ * object.
+ * @param value - The `value` parameter is the object that we want to extract the value from.
+ * @returns The value of the property that starts with 'type' in the given object.
+ */
 const getTypeValue = (value) => {
     for (const property in value) {
         if (property.startsWith('type')) {
@@ -402,6 +464,14 @@ const getTypeValue = (value) => {
         }
     }
 }
+
+
+/**
+ * The function `getYearValue` returns the value of the first property in an object that starts with
+ * the word "year".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'year' in the given object.
+ */
 const getYearValue = (value) => {
     for (const property in value) {
         if (property.startsWith('year')) {
@@ -409,6 +479,14 @@ const getYearValue = (value) => {
         }
     }
 }
+
+
+/**
+ * The function `getMakeValue` returns the value of the first property in an object that starts with
+ * the string "make".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'make' in the given object.
+ */
 const getMakeValue = (value) => {
     for (const property in value) {
         if (property.startsWith('make')) {
@@ -416,6 +494,12 @@ const getMakeValue = (value) => {
         }
     }
 }
+/**
+ * The function `getModelValue` returns the value of the first property in an object that starts with
+ * the string "model".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'model' is being returned.
+ */
 
 const getModelValue = (value) => {
     for (const property in value) {
@@ -425,6 +509,12 @@ const getModelValue = (value) => {
     }
 }
 
+/**
+ * The function `getFlexFuelValue` returns the value of the first property in an object that starts
+ * with 'flex-fuel'.
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'flex-fuel' is being returned.
+ */
 const getFlexFuelValue = (value) => {
     for (const property in value) {
         if (property.startsWith('flex-fuel')) {
@@ -433,6 +523,12 @@ const getFlexFuelValue = (value) => {
     }
 }
 
+/**
+ * The function `getFuelTypeValue` returns the value of the property that starts with 'fuel-type' from
+ * the given object.
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'fuel-type' is being returned.
+ */
 const getFuelTypeValue = (value) => {
     for (const property in value) {
         if (property.startsWith('fuel-type')) {
@@ -441,6 +537,12 @@ const getFuelTypeValue = (value) => {
     }
 }
 
+/**
+ * The function `getAnnualFuelValue` returns the value of the first property in the given object that
+ * starts with "annual-fuel".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'annual-fuel' is being returned.
+ */
 const getAnnualFuelValue = (value) => {
     for (const property in value) {
         if (property.startsWith('annual-fuel')) {
@@ -449,6 +551,12 @@ const getAnnualFuelValue = (value) => {
     }
 }
 
+/**
+ * The function `getAnnualKmValue` returns the value of the first property in the `value` object that
+ * starts with "annual-vkt".
+ * @param value - The `value` parameter is an object that contains properties.
+ * @returns The value of the property that starts with 'annual-vkt' is being returned.
+ */
 const getAnnualKmValue = (value) => {
     for (const property in value) {
         if (property.startsWith('annual-vkt')) {
