@@ -564,3 +564,54 @@ const getAnnualKmValue = (value) => {
         }
     }
 }
+const calculateTotalEmissions = (vehicleValues) => {
+    const annualEmissionName = [];
+    const annualEmissionValues = [];
+    const vehicleEmissionValues = [];
+    const coefficientValue = localStorage.getItem("intensity");
+    vehicleValues.map((vechile, index) => {
+        const description = getDescriptionValue(userData[index]);
+        const annualFuel = getAnnualFuelValue(userData[index]);
+        annualEmissionName.push(description);
+        annualEmissionValues.push(annualFuel * coefficientValue);
+        vehicleEmissionValues.push((annualFuel * coefficientValue) / getAnnualKmValue(userData[index]))
+    })
+    const annualData = [
+        {
+            y: annualEmissionName,
+            x: annualEmissionValues,
+            type: 'bar',
+            orientation: 'h',
+            marker: {
+                color: '#0c1c81',
+                line: {
+                    color: '#5caaff',
+                    width: 1.5
+                }
+            },
+            width: Array.from({ length: annualEmissionName.length }, () => 0.5),
+            bargap: 0.2,
+        }
+    ];
+    const annuallayout = {
+        title: 'Total Emissions by Vehicle',
+        font: {
+            color: '#5caaff',
+            size: 16
+        },
+        yaxis: {
+            side: 'left',
+            automargin: true,
+            ticksuffix: '    '
+        },
+        xaxis: {
+            zeroline: false,
+            showline: false,
+            showgrid: false,
+            showticklabels: false,
+        },
+        width: 600,
+    }
+
+    Plotly.newPlot('annual-emission', annualData, annuallayout, { displaylogo: false });
+}
