@@ -282,6 +282,29 @@ const loadData = () => {
     document.querySelector('.calculate').scrollIntoView();
 }
 
+const calculateOptions = (userValues) => {
+    const type = getTypeValue(userValues);
+    const flexFuel = getFlexFuelValue(userValues);
+    const fuelType = getFuelTypeValue(userValues);
+    if (type === 'Car' && flexFuel === 'Yes' && fuelType === 'Gasoline') {
+        return ['Replace w/ EV Vehicle', 'E85 Ethanol Usage'];
+    }
+    else if (type === 'Car' && flexFuel === 'No' && fuelType === 'Gasoline') {
+        return ['Replace w/ EV Car', 'Replace w/ Biofuel Car E85'];
+    }
+    else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Gasoline') {
+        return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel Car'];
+    }
+    else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Diesel') {
+        return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
+    }
+    else if (type === 'Light Duty Truck' && flexFuel === 'Yes' && fuelType === 'Diesel') {
+        return ['B20 Diesel Usage', 'Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
+    }
+    else {
+        return ['Replace w/ EV Vehicle', 'Right-size to smaller vehicle', 'E85 Ethanol Usage', 'B20 Biodiesel Usage', 'Replace w/ Biofuel car', 'Replace w/ Biofuel Truck', 'Nothing'];
+    }
+}
 
 const calculate = () => {
     const loader = document.getElementById("loader-wrapper");
@@ -363,4 +386,73 @@ const addGreenWizardContainer = (resultText, options, index) => {
 
     document.getElementsByClassName('green-wizard')[0].appendChild(container);
     document.querySelector('.btn-emission-result').style.display = 'block'
+}
+
+const getDescriptionValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('description')) {
+            return value[property]
+        }
+    }
+}
+const getTypeValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('type')) {
+            return value[property]
+        }
+    }
+}
+const getYearValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('year')) {
+            return value[property]
+        }
+    }
+}
+const getMakeValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('make')) {
+            return value[property]
+        }
+    }
+}
+
+const getModelValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('model')) {
+            return value[property]
+        }
+    }
+}
+
+const getFlexFuelValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('flex-fuel')) {
+            return value[property]
+        }
+    }
+}
+
+const getFuelTypeValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('fuel-type')) {
+            return value[property]
+        }
+    }
+}
+
+const getAnnualFuelValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('annual-fuel')) {
+            return value[property]
+        }
+    }
+}
+
+const getAnnualKmValue = (value) => {
+    for (const property in value) {
+        if (property.startsWith('annual-vkt')) {
+            return value[property]
+        }
+    }
 }
