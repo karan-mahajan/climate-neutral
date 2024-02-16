@@ -284,28 +284,83 @@ const loadData = () => {
 
 
 const calculate = () => {
+    const loader = document.getElementById("loader-wrapper");
+    loader.style.display = 'flex';
     var table = document.getElementById("user-details-table")
     var data = [];
     var isValid = true;
     for (var i = 1; i < table.rows.length; i++) {
         var rowData = {};
-        for (var j = 1; j <= 9; j++) {
+        for (var j = 1; j <= 10; j++) {
             var input = table.rows[i].cells[j - 1].querySelector('input');
-            if (!input.value) {
-                isValid = false;
-                break;
+            var select = table.rows[i].cells[j - 1].querySelector('select');
+            if (input) {
+                if (!input.value) {
+                    isValid = false;
+                }
+                rowData[input.name] = input.value;
             }
-            rowData[input.name] = input.value;
+            else {
+                rowData[select.name] = select.value;
+            }
         }
         data.push(rowData);
+        userData.push(rowData);
     }
+    // userData.push([...data]);
     if (isValid) {
-        console.log(data);
+        const greenOptionsWizard = []
+        var i = 0;
+        const greenWizardContainer = document.querySelector('.green-wizard-container');
+        if (greenWizardContainer) {
+            greenWizardContainer.remove();
+        }
         data.map((val) => {
-
-        })
+            greenOptionsWizard[i] = `${getDescriptionValue(val)} - ${getTypeValue(val)} - ${getYearValue(val)} - ${getMakeValue(val)} - ${getModelValue(val)}`
+            const options = calculateOptions(val);
+            addGreenWizardContainer(greenOptionsWizard[i], options, i);
+            i++;
+        });
+        const greenWizard = document.querySelector('.green-wizard');
+        greenWizard.style.display = "flex";
+        greenWizard.scrollIntoView();
     }
     else {
         alert('Please provide all the values');
     }
+    loader.style.display = 'none';
+}
+
+const addGreenWizardContainer = (resultText, options, index) => {
+    var container = document.createElement('div');
+    container.classList.add('green-wizard-container');
+
+    var resultElement = document.createElement('div');
+    resultElement.classList.add('green-wizard-result');
+    resultElement.innerHTML = `<p for="result${index}">` + resultText + '</p>';
+
+    var dropdownContainer = document.createElement('div');
+    dropdownContainer.classList.add('green-wizard-dropdown-container');
+
+    var dropdown = document.createElement('div');
+    dropdown.classList.add('dropdown');
+
+    var select = document.createElement('select');
+    select.id = `result${index}`;
+
+    options.forEach(function (option, index) {
+        var optionElement = document.createElement('option');
+        optionElement.value = option
+        optionElement.textContent = option;
+        select.appendChild(optionElement);
+    });
+
+    dropdown.appendChild(select);
+    dropdownContainer.appendChild(dropdown);
+
+    container.appendChild(resultElement);
+    container.appendChild(dropdownContainer);
+
+    document.getElementsByClassName('green-wizard')[0].appendChild(container);
+    document.querySelector('.btn-emission-result').style.display = 'block'
 }
