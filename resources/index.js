@@ -310,6 +310,12 @@ const loadData = () => {
     document.querySelector('.calculate').scrollIntoView();
 }
 
+/**
+ * The function calculates options based on user values for type, flex fuel, and fuel type.
+ * @param userValues - An object containing the user's input values for the type of vehicle, whether it
+ * is flex fuel capable, and the fuel type.
+ * @returns An array of options based on the user values.
+ */
 const calculateOptions = (userValues) => {
     const type = getTypeValue(userValues);
     const flexFuel = getFlexFuelValue(userValues);
@@ -334,6 +340,10 @@ const calculateOptions = (userValues) => {
     }
 }
 
+/**
+ * The `calculate` function retrieves data from a table, validates it, and then performs calculations
+ * based on the data.
+ */
 const calculate = () => {
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
@@ -382,6 +392,16 @@ const calculate = () => {
     loader.style.display = 'none';
 }
 
+/**
+ * The function `addGreenWizardContainer` creates a container element with a result text and a dropdown
+ * menu, and appends it to a specific element on the page.
+ * @param resultText - The `resultText` parameter is a string that represents the text to be displayed
+ * in the result element of the green wizard container.
+ * @param options - An array of options for the dropdown menu. Each option should be a string.
+ * @param index - The `index` parameter is used to uniquely identify each green wizard container. It is
+ * typically used when creating the `id` attribute for the select element, as well as when creating the
+ * `for` attribute for the result element.
+ */
 const addGreenWizardContainer = (resultText, options, index) => {
     var container = document.createElement('div');
     container.classList.add('green-wizard-container');
