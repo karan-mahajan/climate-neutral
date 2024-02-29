@@ -606,6 +606,10 @@ tr> :nth-child(3)>input {
         padding-left: 4px;
         border-left: none;
         position: relative;
+        white-space: nowrap;
+        width: 148px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .status-table tbody tr .aui-td:before {

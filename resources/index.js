@@ -6,7 +6,6 @@ const userData = [];
  * loader, and starts an animation for a car.
  */
 const startCar = (e) => {
-    console.log(e)
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
     const start = document.querySelector('.start-car');
@@ -105,16 +104,40 @@ const goToTop = () => {
     document.documentElement.scrollTop = 0;
     var table = document.getElementById("user-details-table");
     // Clearing the existing values
-    table.innerHTML = '<tr><th>Description</th><th>Type</th><th>Year</th><th>Make</th><th>Model</th><th>Annual VKT</th><th>Annual Fuel</th><th>Fuel Type</th><th>Flex-Fuel</th><th>Quantity</th></tr > ';
-    addNewRow();
+    table.innerHTML = '<thead><tr>' +
+        '<th scope="col"><div class="aui-th">Description</div></th>' +
+        '<th scope="col"><div class="aui-th">Type</div></th>' +
+        '<th scope="col"><div class="aui-th">Year</div></th>' +
+        '<th scope="col"><div class="aui-th">Make</div></th>' +
+        '<th scope="col"><div class="aui-th">Model</div></th>' +
+        '<th scope="col"><div class="aui-th">Annual VKT</div></th>' +
+        '<th scope="col"><div class="aui-th">Annual Fuel</div></th>' +
+        '<th scope="col"><div class="aui-th">Fuel Type</div></th>' +
+        '<th scope="col"><div class="aui-th">Fuel Fuel</div></th>' +
+        '<th scope="col"><div class="aui-th">Quantity</div></th>' +
+        '</tr></thead>';
+    const tbody = document.createElement("tbody");
+    table.appendChild(tbody)
+    addNewRow(true);
 }
 
 /**
  * The function `addNewRow` adds a new row to a table with input fields and dropdown menus.
  */
-const addNewRow = () => {
+const addNewRow = (startagain = false) => {
     var table = document.getElementById("user-details-table");
-    var newRow = table.insertRow(table.rows.length);
+    var newRow;
+    if (!startagain) {
+        newRow = table.insertRow(table.rows.length);
+    }
+    else {
+        var tbody = table.querySelector('tbody');
+        if (!tbody) {
+            tbody = document.createElement('tbody');
+            table.appendChild(tbody);
+        }
+        newRow = tbody.insertRow(tbody.rows.length);
+    }
     newRow.classList.add('aui-table-status-success');
     var cell1 = newRow.insertCell(0);
     var cell2 = newRow.insertCell(1);
@@ -172,12 +195,18 @@ const saveData = () => {
     var isValid = true;
     for (var i = 1; i < table.rows.length; i++) {
         var rowData = {};
-        for (var j = 1; j <= 9; j++) {
+        for (var j = 1; j <= 10; j++) {
             var input = table.rows[i].cells[j - 1].querySelector('input');
-            if (!input.value) {
-                isValid = false;
+            var select = table.rows[i].cells[j - 1].querySelector('select');
+            if (input) {
+                if (!input.value) {
+                    isValid = false;
+                }
+                rowData[input.name] = input.value;
             }
-            rowData[input.name] = input.value;
+            else if (select) {
+                rowData[select.name] = select.value;
+            }
         }
         if (!isValid) {
             alert('Please provide all the values');
@@ -212,7 +241,7 @@ const loadData = () => {
 
 
             // Clearing the existing values
-            table.innerHTML = '<tr>' +
+            table.innerHTML = '<thead><tr>' +
                 '<th scope="col"><div class="aui-th">Description</div></th>' +
                 '<th scope="col"><div class="aui-th">Type</div></th>' +
                 '<th scope="col"><div class="aui-th">Year</div></th>' +
@@ -223,12 +252,17 @@ const loadData = () => {
                 '<th scope="col"><div class="aui-th">Fuel Type</div></th>' +
                 '<th scope="col"><div class="aui-th">Fuel Fuel</div></th>' +
                 '<th scope="col"><div class="aui-th">Quantity</div></th>' +
-                '</tr>';
+                '</tr></thead>';
 
-
+            var tbody = table.querySelector('tbody');
+            if (!tbody) {
+                tbody = document.createElement('tbody');
+                table.appendChild(tbody);
+            }
             for (var i = 0; i < data.length; i++) {
-                var newRow = table.insertRow(table.rows.length);
+                var newRow = tbody.insertRow(tbody.rows.length);
                 var propertyOrder = Object.keys(data[i]);
+                newRow.classList.add('aui-table-status-success');
                 for (var j = 0; j < propertyOrder.length; j++) {
                     var propertyName = propertyOrder[j];
                     var cell = newRow.insertCell();
