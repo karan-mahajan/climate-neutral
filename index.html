@@ -28,20 +28,21 @@
     <div class="table-cont display-none">
         <h1 class="table-header">Please Enter the Details</h1>
         <div>
+            <div class="province-select mb-3">
+                <span class="ml-2"><b>Provincial Electricity Emissions Coefficient</b></span>
+                <select class="province-select-type" onchange="displayConsumptionIntensity()">
+                </select>
+                <span class="province-value"></span>
+            </div>
             <div class="data-action">
                 <label for="fileInput" class="load-data">Load Data</label>
                 <div class="data-action-save">
-                    <div class="province-select">
-                        <span>Provincial Electricity Emissions Coefficient</span>
-                        <select class="province-select-type" onchange="displayConsumptionIntensity()">
-                        </select>
-                        <span class="province-value"></span>
-                    </div>
+
                     <input type="file" id="fileInput" class="file-input" accept=".json" onchange="loadData(this.files)">
                     <button class="save-data" onclick="saveData()">Save Data</button>
                 </div>
             </div>
-            <div class="table-container">
+            <!-- <div class="table-container">
                 <table id="user-details-table">
                     <thead>
                         <tr>
@@ -85,7 +86,90 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
+            <table class="status-table" id="user-details-table">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            <div class="aui-th">Description</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Type</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Year</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Make</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Model</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Annual VKT</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Annual Fuel</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Fuel Type</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Fuel Fuel</div>
+                        </th>
+                        <th scope="col">
+                            <div class="aui-th">Quantity</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="aui-table-status-success">
+                        <td data-title="Description">
+                            <div class="aui-td"><input type="text" name="description10"></div>
+                        </td>
+                        <td data-title="Type">
+                            <div class="aui-td"><select name="type11" class="input-select-type">
+                                    <option value="Light Duty Truck" selected>Light Duty Truck</option>
+                                    <option value="Car">Car</option>
+                                    <option value="Biofuel Car">Biofuel Car</option>
+                                    <option value="Biofuel E85 Car">Biofuel E85 Car</option>
+                                    <option value="Biofuel Truck">Biofuel Truck</option>
+                                </select></div>
+                        </td>
+                        <td data-title="Year">
+                            <div class="aui-td"><input type="number" name="year12"></div>
+                        </td>
+                        <td data-title="Make">
+                            <div class="aui-td"><input type="text" name="make13"></div>
+                        </td>
+                        <td data-title="Model">
+                            <div class="aui-td"><input type="text" name="model14"></div>
+                        </td>
+                        <td data-title="Annual VKT">
+                            <div class="aui-td"><input type="number" name="annual-vkt15"></div>
+                        </td>
+                        <td data-title="Annual Fuel">
+                            <div class="aui-td"><input type="number" name="annual-fuel16"></div>
+                        </td>
+                        <td data-title="Fuel Type">
+                            <div class="aui-td"><select name="fuel-type17" class="input-select-fuel-type">
+                                    <option value="Gasoline">Gasoline</option>
+                                    <option value="E10 Gasoline">E10 Gasoline</option>
+                                    <option value="Diesel">Diesel</option>
+                                </select></div>
+                        </td>
+                        <td data-title="Flex Fuel">
+                            <div class="aui-td"><select name="flex-fuel18" class="input-select">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select></div>
+                        </td>
+                        <td data-title="Quantity">
+                            <div class="aui-td"><input type="number" name="quantity19"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             <button class="add-row" onclick="addNewRow()">Add New Row</button>
             <button class="calculate" onclick="calculate()">Calculate</button>
         </div>

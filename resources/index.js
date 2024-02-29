@@ -5,7 +5,7 @@ const userData = [];
  * The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
  * loader, and starts an animation for a car.
  */
-const startCar = () => {
+const startCar = (e) => {
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
     const start = document.querySelector('.start-car');
@@ -104,16 +104,41 @@ const goToTop = () => {
     document.documentElement.scrollTop = 0;
     var table = document.getElementById("user-details-table");
     // Clearing the existing values
-    table.innerHTML = '<tr><th>Description</th><th>Type</th><th>Year</th><th>Make</th><th>Model</th><th>Annual VKT</th><th>Annual Fuel</th><th>Fuel Type</th><th>Flex-Fuel</th><th>Quantity</th></tr > ';
-    addNewRow();
+    table.innerHTML = '<thead><tr>' +
+        '<th scope="col"><div class="aui-th">Description</div></th>' +
+        '<th scope="col"><div class="aui-th">Type</div></th>' +
+        '<th scope="col"><div class="aui-th">Year</div></th>' +
+        '<th scope="col"><div class="aui-th">Make</div></th>' +
+        '<th scope="col"><div class="aui-th">Model</div></th>' +
+        '<th scope="col"><div class="aui-th">Annual VKT</div></th>' +
+        '<th scope="col"><div class="aui-th">Annual Fuel</div></th>' +
+        '<th scope="col"><div class="aui-th">Fuel Type</div></th>' +
+        '<th scope="col"><div class="aui-th">Fuel Fuel</div></th>' +
+        '<th scope="col"><div class="aui-th">Quantity</div></th>' +
+        '</tr></thead>';
+    const tbody = document.createElement("tbody");
+    table.appendChild(tbody)
+    addNewRow(true);
 }
 
 /**
  * The function `addNewRow` adds a new row to a table with input fields and dropdown menus.
  */
-const addNewRow = () => {
+const addNewRow = (startagain = false) => {
     var table = document.getElementById("user-details-table");
-    var newRow = table.insertRow(table.rows.length);
+    var newRow;
+    if (!startagain) {
+        newRow = table.insertRow(table.rows.length);
+    }
+    else {
+        var tbody = table.querySelector('tbody');
+        if (!tbody) {
+            tbody = document.createElement('tbody');
+            table.appendChild(tbody);
+        }
+        newRow = tbody.insertRow(tbody.rows.length);
+    }
+    newRow.classList.add('aui-table-status-success');
     var cell1 = newRow.insertCell(0);
     var cell2 = newRow.insertCell(1);
     var cell3 = newRow.insertCell(2);
@@ -125,29 +150,38 @@ const addNewRow = () => {
     var cell9 = newRow.insertCell(8);
     var cell10 = newRow.insertCell(9);
     const nextRow = table.rows.length - 1;
-    cell1.innerHTML = '<input type="text" name="description' + nextRow + '0">';
-    cell2.innerHTML = `<select name="type${nextRow}1" class="input-select-type">
+    cell1.setAttribute('data-title', 'Description');
+    cell1.setAttribute('data-title', 'Type');
+    cell1.setAttribute('data-title', 'Year');
+    cell1.setAttribute('data-title', 'Make');
+    cell1.setAttribute('data-title', 'Model');
+    cell1.setAttribute('data-title', 'Annual VKT');
+    cell1.setAttribute('data-title', 'Annual Fuel');
+    cell1.setAttribute('data-title', 'Quantity');
+
+    cell1.innerHTML = `<div class="aui-td"><input type="text" name="description${newRow}0"></div>`
+    cell2.innerHTML = `<div class="aui-td"><select name="type${nextRow}1" class="input-select-type">
                                     <option value="Light Duty Truck" selected>Light Duty Truck</option>
                                     <option value="Car">Car</option>
                                     <option value="Biofuel Car">Biofuel Car</option>
                                     <option value="Biofuel E85 Car">Biofuel E85 Car</option>
                                     <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select>`
-    cell3.innerHTML = '<input type="number" name="year' + nextRow + '2">';
-    cell4.innerHTML = '<input type="text" name="make' + nextRow + '3">';
-    cell5.innerHTML = '<input type="text" name="model' + nextRow + '4">';
-    cell6.innerHTML = '<input type="number" name="annual-vkt' + nextRow + '5">';
-    cell7.innerHTML = '<input type="number" name="annual-fuel' + nextRow + '6">';
-    cell8.innerHTML = `<select name="fuel-type${nextRow}7" class="input-select-fuel-type">
+                                </select></div>`
+    cell3.innerHTML = '<div class="aui-td"><input type="number" name="year' + nextRow + '2"></div>';
+    cell4.innerHTML = '<div class="aui-td"><input type="text" name="make' + nextRow + '3"></div>';
+    cell5.innerHTML = '<div class="aui-td"><input type="text" name="model' + nextRow + '4"></div>';
+    cell6.innerHTML = '<div class="aui-td"><input type="number" name="annual-vkt' + nextRow + '5"></div>';
+    cell7.innerHTML = '<div class="aui-td"><input type="number" name="annual-fuel' + nextRow + '6"></div>';
+    cell8.innerHTML = `<div class="aui-td"><select name="fuel-type${nextRow}7" class="input-select-fuel-type">
                                     <option value="Gasoline" selected>Gasoline</option>
                                     <option value="E10 Gasoline">E10 Gasoline</option>
                                     <option value="Diesel">Diesel</option>
-                                </select>`
-    cell9.innerHTML = `<select name="flex-fuel${nextRow}8" class="input-select">
+                                </select></div>`
+    cell9.innerHTML = `<div class="aui-td"><select name="flex-fuel${nextRow}8" class="input-select">
                                     <option value="Yes">Yes</option>
                                     <option value="No">No</option>
-                                </select>`;
-    cell10.innerHTML = '<input type="number" name="quantity' + nextRow + '9">';
+                                </select></div>`;
+    cell10.innerHTML = '<div class="aui-td"><input type="number" name="quantity' + nextRow + '9"></div>';
 }
 
 
@@ -161,12 +195,18 @@ const saveData = () => {
     var isValid = true;
     for (var i = 1; i < table.rows.length; i++) {
         var rowData = {};
-        for (var j = 1; j <= 9; j++) {
+        for (var j = 1; j <= 10; j++) {
             var input = table.rows[i].cells[j - 1].querySelector('input');
-            if (!input.value) {
-                isValid = false;
+            var select = table.rows[i].cells[j - 1].querySelector('select');
+            if (input) {
+                if (!input.value) {
+                    isValid = false;
+                }
+                rowData[input.name] = input.value;
             }
-            rowData[input.name] = input.value;
+            else if (select) {
+                rowData[select.name] = select.value;
+            }
         }
         if (!isValid) {
             alert('Please provide all the values');
@@ -201,104 +241,120 @@ const loadData = () => {
 
 
             // Clearing the existing values
-            table.innerHTML = '<tr><th>Description</th><th>Type</th><th>Year</th><th>Make</th><th>Model</th><th>Annual VKT</th><th>Annual Fuel</th><th>Fuel Type</th><th>Flex-Fuel</th><th>Quantity</th></tr > ';
+            table.innerHTML = '<thead><tr>' +
+                '<th scope="col"><div class="aui-th">Description</div></th>' +
+                '<th scope="col"><div class="aui-th">Type</div></th>' +
+                '<th scope="col"><div class="aui-th">Year</div></th>' +
+                '<th scope="col"><div class="aui-th">Make</div></th>' +
+                '<th scope="col"><div class="aui-th">Model</div></th>' +
+                '<th scope="col"><div class="aui-th">Annual VKT</div></th>' +
+                '<th scope="col"><div class="aui-th">Annual Fuel</div></th>' +
+                '<th scope="col"><div class="aui-th">Fuel Type</div></th>' +
+                '<th scope="col"><div class="aui-th">Fuel Fuel</div></th>' +
+                '<th scope="col"><div class="aui-th">Quantity</div></th>' +
+                '</tr></thead>';
 
-
+            var tbody = table.querySelector('tbody');
+            if (!tbody) {
+                tbody = document.createElement('tbody');
+                table.appendChild(tbody);
+            }
             for (var i = 0; i < data.length; i++) {
-                var newRow = table.insertRow(table.rows.length);
+                var newRow = tbody.insertRow(tbody.rows.length);
                 var propertyOrder = Object.keys(data[i]);
+                newRow.classList.add('aui-table-status-success');
                 for (var j = 0; j < propertyOrder.length; j++) {
                     var propertyName = propertyOrder[j];
                     var cell = newRow.insertCell();
                     var propertyValue = data[i][propertyName];
                     if (propertyName.startsWith('flex-fuel')) {
                         if (propertyValue === 'No') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select">
                                     <option value="Yes">Yes</option>
                                     <option value="No" selected>No</option>
-                                </select>`;
+                                </select></div>`;
                         }
                         else {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select">
                                     <option value="Yes" selected>Yes</option>
                                     <option value="No">No</option>
-                                </select>`;
+                                </select></div>`;
                         }
                     }
                     else if (propertyName.startsWith('fuel-type')) {
                         if (propertyValue === 'Gasoline') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-fuel-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-fuel-type">
                                     <option value="Gasoline" selected>Gasoline</option>
                                     <option value="E10 Gasoline">E10 Gasoline</option>
                                     <option value="Diesel">Diesel</option>
-                                </select>`
+                                </select></div>`
                         }
                         else if (propertyValue === 'Diesel') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-fuel-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-fuel-type">
                                     <option value="Gasoline">Gasoline</option>
                                     <option value="E10 Gasoline">E10 Gasoline</option>
                                     <option value="Diesel" selected>Diesel</option>
-                                </select>`
+                                </select></div>`
                         } else {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-fuel-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-fuel-type">
                                     <option value="Gasoline">Gasoline</option>
                                     <option value="E10 Gasoline" selected>E10 Gasoline</option>
                                     <option value="Diesel">Diesel</option>
-                                </select>`
+                                </select></div>`
                         }
                     }
                     else if (propertyName.startsWith('type')) {
                         if (propertyValue === 'Car') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
                                     <option value="Light Duty Truck">Light Duty Truck</option>
                                     <option value="Car" selected>Car</option>
                                     <option value="Biofuel Car">Biofuel Car</option>
                                     <option value="Biofuel E85 Car">Biofuel E85 Car</option>
                                     <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select>`
+                                </select></div>`
                         }
                         else if (propertyValue === 'Light Duty Truck') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
                                     <option value="Light Duty Truck" selected>Light Duty Truck</option>
                                     <option value="Car">Car</option>
                                     <option value="Biofuel Car">Biofuel Car</option>
                                     <option value="Biofuel E85 Car">Biofuel E85 Car</option>
                                     <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select>`
+                                </select></div>`
                         }
                         else if (propertyValue === 'Biofuel Car') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
                                     <option value="Light Duty Truck">Light Duty Truck</option>
                                     <option value="Car">Car</option>
                                     <option value="Biofuel Car" selected>Biofuel Car</option>
                                     <option value="Biofuel E85 Car">Biofuel E85 Car</option>
                                     <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select>`
+                                </select></div>`
                         }
                         else if (propertyValue === 'Biofuel E85 Car') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
                                     <option value="Light Duty Truck">Light Duty Truck</option>
                                     <option value="Car">Car</option>
                                     <option value="Biofuel Car">Biofuel Car</option>
                                     <option value="Biofuel E85 Car" selected>Biofuel E85 Car</option>
                                     <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select>`
+                                </select></div>`
                         }
                         else if (propertyValue === 'Biofuel Truck') {
-                            cell.innerHTML = `<select name="${propertyName}" class="input-select-type">
+                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
                                     <option value="Light Duty Truck">Light Duty Truck</option>
                                     <option value="Car">Car</option>
                                     <option value="Biofuel Car">Biofuel Car</option>
                                     <option value="Biofuel E85 Car" selected>Biofuel E85 Car</option>
                                     <option value="Biofuel Truck" selected>Biofuel Truck</option>
-                                </select>`
+                                </select></div>`
                         }
                     }
                     else if (propertyName.startsWith('year') || propertyName.startsWith('annual') || propertyName.startsWith('quantity') || propertyName.startsWith('annual-fuel')) {
-                        cell.innerHTML = `<input type="number" name="${propertyName}" value="${propertyValue}">`;
+                        cell.innerHTML = `<div class="aui-td"><input type="number" name="${propertyName}" value="${propertyValue}"></div>`;
                     }
                     else {
-                        cell.innerHTML = `<input type="text" name="${propertyName}" value="${propertyValue}">`;
+                        cell.innerHTML = `<div class="aui-td"><input type="text" name="${propertyName}" value="${propertyValue}"></div>`;
                     }
                 }
             }
