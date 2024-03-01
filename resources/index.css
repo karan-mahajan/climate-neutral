@@ -14,13 +14,14 @@ header {
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 45px;
+    font-size: 35px;
     font-weight: bold;
     position: sticky;
     top: 0;
     background-color: #0c1c81;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1;
+    font-style: italic;
 }
 
 .dash-container {
@@ -32,7 +33,7 @@ header {
 
 .dash-container img {
     position: absolute;
-    top: 30px;
+    top: 55px;
     right: 20%;
     max-height: 400px;
     display: inline-block;
@@ -764,4 +765,16 @@ tr> :nth-child(3)>input {
     .status-table tbody {
         display: table-row-group;
     }
+}
+
+
+a[data-title="Zoom"],
+a[data-title="Pan"],
+a[data-title="Box Select"],
+a[data-title="Lasso Select"],
+a[data-title="Zoom in"],
+a[data-title="Zoom out"],
+a[data-title="Autoscale"],
+a[data-title="Reset axes"] {
+    display: none;
 }
