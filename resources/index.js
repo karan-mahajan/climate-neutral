@@ -727,4 +727,47 @@ const showEmissions = () => {
     calculateTotalEmissions(currentValues);
     document.querySelector('.emission-container').classList.remove('display-none');
     document.querySelector('.emission-bar-graphs').scrollIntoView();
+    document.querySelector('.btn-saving-result').classList.remove('display-none');
+}
+
+
+const showSavings = () => {
+    var data = [];
+    var containers = document.querySelectorAll('.green-wizard-container');
+
+    containers.forEach(function (container, index) {
+        var resultText = container.querySelector('.green-wizard-result p').textContent;
+        var dropdownValue = container.querySelector('select').value;
+        data.push({ fleetVehicle: resultText, actionApplied: dropdownValue, emissionSavings: '344', savingsPercentage: '80-83%' });
+    });
+    var parentElement = document.querySelector('.action-savings-wizard');
+
+    if (parentElement) {
+        for (var i = parentElement.children.length - 1; i > 0; i--) {
+            parentElement.removeChild(parentElement.children[i]);
+        }
+    }
+
+    data.forEach(function (item) {
+        const containerBody = document.createElement('div');
+        containerBody.classList.add('action-savings-wizard-body')
+        document.querySelector('.action-savings-wizard').appendChild(containerBody);
+        var fleetVehicleDiv = document.createElement('div');
+        fleetVehicleDiv.textContent = item.fleetVehicle;
+        containerBody.appendChild(fleetVehicleDiv);
+
+        var actionAppliedDiv = document.createElement('div');
+        actionAppliedDiv.textContent = item.actionApplied;
+        containerBody.appendChild(actionAppliedDiv);
+
+        var emissionSavingsDiv = document.createElement('div');
+        emissionSavingsDiv.textContent = item.emissionSavings;
+        containerBody.appendChild(emissionSavingsDiv);
+
+        var savingsPercentageDiv = document.createElement('div');
+        savingsPercentageDiv.textContent = item.savingsPercentage;
+        containerBody.appendChild(savingsPercentageDiv);
+    });
+    document.querySelector('.savings-chart').classList.remove('display-none');
+    document.querySelector('.savings-chart').scrollIntoView();
 }

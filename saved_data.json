@@ -1,0 +1,50 @@
+[
+  {
+    "description10": "Maintaince 1",
+    "type11": "Light Duty Truck",
+    "year12": "2018",
+    "make13": "Fork",
+    "model14": "F-150",
+    "annual-vkt15": "12000",
+    "annual-fuel16": "762",
+    "fuel-type17": "E10 Gasoline",
+    "flex-fuel18": "Yes",
+    "quantity19": "1"
+  },
+  {
+    "description20": "Maintaince 2",
+    "type21": "Light Duty Truck",
+    "year22": "2018",
+    "make23": "Fork",
+    "model24": "F-150",
+    "annual-vkt25": "9456",
+    "annual-fuel26": "546",
+    "fuel-type27": "E10 Gasoline",
+    "flex-fuel28": "Yes",
+    "quantity29": "3"
+  },
+  {
+    "description30": "Shipping 1",
+    "type31": "Light Duty Truck",
+    "year32": "2021",
+    "make33": "Dogde",
+    "model34": "Caravan",
+    "annual-vkt35": "8500",
+    "annual-fuel36": "344",
+    "fuel-type37": "E10 Gasoline",
+    "flex-fuel38": "No",
+    "quantity39": "4"
+  },
+  {
+    "description40": "Delivery 1",
+    "type41": "Car",
+    "year42": "2019",
+    "make43": "Fork",
+    "model44": "Focus",
+    "annual-vkt45": "4600",
+    "annual-fuel46": "3222",
+    "fuel-type47": "E10 Gasoline",
+    "flex-fuel48": "No",
+    "quantity49": "1"
+  }
+]

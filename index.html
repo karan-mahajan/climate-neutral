@@ -26,7 +26,6 @@
         </div>
     </div>
     <div class="table-cont display-none">
-        <h1 class="table-header">Please Enter the Details</h1>
         <div>
             <div class="province-select mb-3">
                 <span class="ml-2"><b>Provincial Electricity Emissions Coefficient</b></span>
@@ -194,6 +193,26 @@
             <div id='vehicle-emission'></div>
         </div>
         <h2>AVERAGE EMISSIONS INTENSITY FOR FLEET</h3>
+    </div>
+    <button class="btn-saving-result display-none" onclick="showSavings()">Show Action
+        Savings</button>
+    <div class="container savings-chart display-none">
+        <div class="action-savings-wizard">
+            <div class="action-savings-wizard-header">
+                <div>
+                    Fleet Vehicle
+                </div>
+                <div>
+                    Action Applied
+                </div>
+                <div>
+                    Emission Savings (TCO2e)
+                </div>
+                <div>
+                    % Savings
+                </div>
+            </div>
+        </div>
     </div>
     <div id="loader-wrapper">
         <div id="loader"></div>
