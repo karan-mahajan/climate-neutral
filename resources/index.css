@@ -176,7 +176,9 @@ td {
     font-size: 18px;
 }
 
-.save-data {
+.save-data,
+.print-result,
+.save-emission-result {
     font-size: 16px;
     background-color: #A1DA3A;
     color: white;
@@ -184,6 +186,7 @@ td {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: 600;
 }
 
 .load-data {
@@ -213,7 +216,7 @@ td {
 
 .chart {
     margin-top: 60px;
-    margin-bottom: 100px;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -223,32 +226,54 @@ td {
 .green-wizard {
     display: flex;
     flex-direction: column;
-    background-color: #26b170;
-    color: white;
+    color: black;
     width: 100%;
-    border-radius: 4px;
     margin-block: 30px;
+    background: rgb(255, 255, 255);
+    border: 0.1rem solid rgb(236, 236, 238);
+    border-radius: 0.8rem;
+}
+
+.green-wizard:hover {
+    filter: drop-shadow(rgba(0, 0, 0, 0.2) 0px 0.2rem 0.4rem);
 }
 
 .green-wizard-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 10px 15px;
+    padding: 10px 15px;
+    background: #26b170;
+    color: white;
+    margin: 15px;
+    text-align: center;
 }
 
-.green-wizard-header> :nth-child(2) {
-    flex: 0.3;
+
+
+.green-wizard-header>span {
+    flex: 0.5;
+    font-weight: 600;
+}
+
+.green-wizard-header span span {
+    margin-left: 5px;
 }
 
 .green-wizard-container {
     display: flex;
-    margin: 10px 15px;
+    margin: 5px 10px;
+    padding: 10px;
     align-items: center;
+    border-left: 2px solid #0081B2;
+}
+
+.green-wizard-container:last-child {
+    margin-bottom: 15px;
 }
 
 .green-wizard-result {
-    flex: 0.7;
+    flex: 0.6;
 }
 
 .green-wizard-result>p {
@@ -264,26 +289,23 @@ td {
 }
 
 .green-wizard-dropdown-container {
-    flex: 0.3;
+    flex: 0.5;
 }
 
-.btn-emission-result {
-    margin-top: 20px;
-    background-color: #b12667;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
+.green-wizard-dropdown-container select {
+    padding-left: 8px;
 }
 
+.btn-emission-result,
 .btn-saving-result {
     margin-top: 20px;
     background-color: #b12667;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 5px 10px;
     border-radius: 8px;
-    margin-left: 25px;
+    margin-left: 5%;
+    margin-bottom: 20px;
 }
 
 
@@ -347,10 +369,6 @@ td {
     height: 34px;
     line-height: 19px;
     padding: 5px;
-}
-
-tr> :last-child {
-    max-width: 100px;
 }
 
 tr> :nth-child(3)>input {
@@ -429,7 +447,7 @@ tr> :nth-child(3)>input {
 
 .table-cont {
     margin-top: 30px;
-    margin: auto 2%;
+    margin: auto 12px;
 }
 
 .table-cont .table-header {
@@ -494,7 +512,7 @@ tr> :nth-child(3)>input {
 }
 
 .status-table thead th .aui-th {
-    padding: 0.75rem;
+    padding: 5px 10px;
     border-top: 1px solid #e3e3e3;
     border-left: 1px solid #e3e3e3;
     border-bottom: 1px solid #e3e3e3;
@@ -511,6 +529,7 @@ tr> :nth-child(3)>input {
         align-items: center;
         border-left: none;
         position: relative;
+        justify-content: center;
     }
 
     .status-table thead th .aui-th:before {
@@ -612,12 +631,12 @@ tr> :nth-child(3)>input {
         align-items: center;
         border: 1px solid #e3e3e3;
         border-right: none;
-        padding: 0.75rem;
+        padding: 10px;
         padding-left: 4px;
         border-left: none;
         position: relative;
         white-space: nowrap;
-        width: 148px;
+        /* width: 148px; */
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -801,16 +820,29 @@ a[data-title="Reset axes"] {
     color: #ffffff;
     gap: 10px;
     padding: 20px;
+    color: black;
+    width: 100%;
+    margin-block: 30px;
+    background: rgb(255, 255, 255);
+    border: 0.1rem solid rgb(236, 236, 238);
+    border-radius: 0.8rem;
 }
 
 .action-savings-wizard-header {
     display: flex;
     flex-direction: row;
     font-weight: 500;
+    background: #26b170;
+    color: white;
+    padding: 10px 5px;
 }
 
 .action-savings-wizard-header>div {
     font-size: 24px;
+}
+
+.action-savings-wizard-header>div span {
+    margin-left: 5px;
 }
 
 .action-savings-wizard-header> :nth-child(1) {
@@ -835,6 +867,7 @@ a[data-title="Reset axes"] {
 .action-savings-wizard-body {
     display: flex;
     flex-direction: row;
+    padding: 8px;
 }
 
 .action-savings-wizard-body> :nth-child(1) {
@@ -857,8 +890,37 @@ a[data-title="Reset axes"] {
 }
 
 .chart-container {
-    width: 40%;
-    height: 40%;
-    margin: 20px;
-    display: inline-block;
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.save-buttons {
+    margin-right: 30px;
+    gap: 10px;
+}
+
+@media print {
+    body {
+        visibility: hidden;
+    }
+
+    #save-content {
+        visibility: visible;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 100px;
+}
+
+th:nth-child(9),
+th:nth-child(10) {
+    width: 110px;
 }
