@@ -631,12 +631,12 @@ tr> :nth-child(3)>input {
         align-items: center;
         border: 1px solid #e3e3e3;
         border-right: none;
-        padding: 0.75rem;
+        padding: 10px;
         padding-left: 4px;
         border-left: none;
         position: relative;
         white-space: nowrap;
-        width: 148px;
+        /* width: 148px; */
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -820,16 +820,29 @@ a[data-title="Reset axes"] {
     color: #ffffff;
     gap: 10px;
     padding: 20px;
+    color: black;
+    width: 100%;
+    margin-block: 30px;
+    background: rgb(255, 255, 255);
+    border: 0.1rem solid rgb(236, 236, 238);
+    border-radius: 0.8rem;
 }
 
 .action-savings-wizard-header {
     display: flex;
     flex-direction: row;
     font-weight: 500;
+    background: #26b170;
+    color: white;
+    padding: 10px 5px;
 }
 
 .action-savings-wizard-header>div {
     font-size: 24px;
+}
+
+.action-savings-wizard-header>div span {
+    margin-left: 5px;
 }
 
 .action-savings-wizard-header> :nth-child(1) {
@@ -854,6 +867,7 @@ a[data-title="Reset axes"] {
 .action-savings-wizard-body {
     display: flex;
     flex-direction: row;
+    padding: 8px;
 }
 
 .action-savings-wizard-body> :nth-child(1) {
@@ -876,8 +890,37 @@ a[data-title="Reset axes"] {
 }
 
 .chart-container {
-    width: 40%;
-    height: 40%;
-    margin: 20px;
-    display: inline-block;
+    display: flex;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.save-buttons {
+    margin-right: 30px;
+    gap: 10px;
+}
+
+@media print {
+    body {
+        visibility: hidden;
+    }
+
+    #save-content {
+        visibility: visible;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 100px;
+}
+
+th:nth-child(9),
+th:nth-child(10) {
+    width: 110px;
 }
