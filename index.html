@@ -168,26 +168,38 @@
     </div>
     <button class="btn-saving-result display-none" onclick="showSavings()">Show Action
         Savings</button>
-    <div class="container savings-chart display-none">
-        <div class="action-savings-wizard">
-            <div class="action-savings-wizard-header">
-                <div>
-                    Fleet Vehicle
-                </div>
-                <div>
-                    Action Applied
-                </div>
-                <div>
-                    Emission Savings (TCO2e)
-                </div>
-                <div>
-                    % Savings
+    <div class="display-none save-buttons align-items-center justify-content-end">
+        <button class="print-result" onclick="printResult()">Print Result</button>
+        <button class="save-emission-result" onclick="saveResult()">Save Result</button>
+    </div>
+    <div id="save-content">
+        <div class="container savings-chart display-none">
+            <div class="action-savings-wizard">
+                <div class="action-savings-wizard-header">
+                    <div class="d-flex align-items-center justify-content-center">
+                        Fleet Vehicle <span class="material-symbols-outlined ml-2">
+                            local_shipping
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        Action Applied <span class="material-symbols-outlined">
+                            check_box
+                        </span>
+                    </div>
+                    <div>
+                        Emission Savings (TCO2e)
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        % Savings <span class="material-symbols-outlined">
+                            energy_savings_leaf
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="chart-container">
-        <canvas id="comparisonGraph"></canvas>
+        <div class="chart-container display-none">
+            <div id='comparisonGraph'></div>
+        </div>
     </div>
     <div id="loader-wrapper">
         <div id="loader"></div>
