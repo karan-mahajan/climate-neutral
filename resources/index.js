@@ -2,9 +2,9 @@ const provinceData = [];
 const userData = [];
 
 /**
- * The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
- * loader, and starts an animation for a car.
- */
+* The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
+* loader, and starts an animation for a car.
+*/
 const startCar = (e) => {
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
@@ -14,6 +14,7 @@ const startCar = (e) => {
     fetchEmissionCoefficient();
     loader.style.display = 'none';
     var car = document.querySelector('.car');
+    // car.style.animation = 'run 10s linear infinite';
     if (start.innerHTML == 'Stop the Car') {
         start.innerHTML = 'Start the Car';
         car.style.animationPlayState = 'paused';
@@ -25,10 +26,10 @@ const startCar = (e) => {
 }
 
 /**
- * The function `displayConsumptionIntensity` retrieves the selected province from a dropdown menu,
- * finds the corresponding data for that province, and updates the DOM with the consumption intensity
- * value for that province.
- */
+* The function `displayConsumptionIntensity` retrieves the selected province from a dropdown menu,
+* finds the corresponding data for that province, and updates the DOM with the consumption intensity
+* value for that province.
+*/
 const displayConsumptionIntensity = () => {
     const selectedProvince = document.querySelector('.province-select-type').value;
     const selectedData = provinceData.find(data => data.province === selectedProvince);
@@ -41,9 +42,9 @@ const displayConsumptionIntensity = () => {
 }
 
 /**
- * The function fetches emission coefficients for different provinces in Canada from a website and
- * populates a select element with the province names, and sets the default value to Ontario.
- */
+* The function fetches emission coefficients for different provinces in Canada from a website and
+* populates a select element with the province names, and sets the default value to Ontario.
+*/
 const fetchEmissionCoefficient = () => {
     fetch('https://www.canada.ca/en/environment-climate-change/services/climate-change/pricing-pollution-how-it-will-work/output-based-pricing-system/federal-greenhouse-gas-offset-system/emission-factors-reference-values.html')
         .then(response => response.text())
@@ -86,9 +87,9 @@ const fetchEmissionCoefficient = () => {
 window.onscroll = function () { scrollFunction() };
 
 /**
- * The scrollFunction checks if the user has scrolled down a certain distance and displays or hides a
- * "go to top" button accordingly.
- */
+* The scrollFunction checks if the user has scrolled down a certain distance and displays or hides a
+* "go to top" button accordingly.
+*/
 function scrollFunction() {
     const topButton = document.querySelector("#gototop");
     const header = document.querySelector(".header");
@@ -101,9 +102,9 @@ function scrollFunction() {
 }
 
 /**
- * The function `goToTop` scrolls the page to the top, clears the content of a table with the id
- * "user-details-table", and adds a new row to the table.
- */
+* The function `goToTop` scrolls the page to the top, clears the content of a table with the id
+* "user-details-table", and adds a new row to the table.
+*/
 const goToTop = () => {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
@@ -127,8 +128,8 @@ const goToTop = () => {
 }
 
 /**
- * The function `addNewRow` adds a new row to a table with input fields and dropdown menus.
- */
+* The function `addNewRow` adds a new row to a table with input fields and dropdown menus.
+*/
 const addNewRow = (startagain = false) => {
     var table = document.getElementById("user-details-table");
     var newRow;
@@ -168,9 +169,6 @@ const addNewRow = (startagain = false) => {
     cell2.innerHTML = `<div class="aui-td"><select name="type${nextRow}1" class="input-select-type">
                                     <option value="Light Duty Truck" selected>Light Duty Truck</option>
                                     <option value="Car">Car</option>
-                                    <option value="Biofuel Car">Biofuel Car</option>
-                                    <option value="Biofuel E85 Car">Biofuel E85 Car</option>
-                                    <option value="Biofuel Truck">Biofuel Truck</option>
                                 </select></div>`
     cell3.innerHTML = '<div class="aui-td"><input type="number" name="year' + nextRow + '2"></div>';
     cell4.innerHTML = '<div class="aui-td"><input type="text" name="make' + nextRow + '3"></div>';
@@ -191,9 +189,9 @@ const addNewRow = (startagain = false) => {
 
 
 /**
- * The `saveData` function retrieves data from an HTML table, validates it, and then downloads it as a
- * JSON file if all values are provided.
- */
+* The `saveData` function retrieves data from an HTML table, validates it, and then downloads it as a
+* JSON file if all values are provided.
+*/
 const saveData = () => {
     var table = document.getElementById("user-details-table")
     var data = [];
@@ -231,8 +229,8 @@ const saveData = () => {
 }
 
 /**
- * The `loadData` function reads a JSON file, parses its contents, and populates a table with the data.
- */
+* The `loadData` function reads a JSON file, parses its contents, and populates a table with the data.
+*/
 const loadData = () => {
     var fileInput = document.getElementById('fileInput');
     var file = fileInput.files[0];
@@ -273,6 +271,7 @@ const loadData = () => {
                     var cell = newRow.insertCell();
                     var propertyValue = data[i][propertyName];
                     if (propertyName.startsWith('flex-fuel')) {
+                        cell.setAttribute('data-title', 'Flex Fuel');
                         if (propertyValue === 'No') {
                             cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select">
                                     <option value="Yes">Yes</option>
@@ -287,6 +286,7 @@ const loadData = () => {
                         }
                     }
                     else if (propertyName.startsWith('fuel-type')) {
+                        cell.setAttribute('data-title', 'Fuel Type');
                         if (propertyValue === 'Gasoline') {
                             cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-fuel-type">
                                     <option value="Gasoline" selected>Gasoline</option>
@@ -309,56 +309,45 @@ const loadData = () => {
                         }
                     }
                     else if (propertyName.startsWith('type')) {
+                        cell.setAttribute('data-title', 'Type');
                         if (propertyValue === 'Car') {
                             cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
                                     <option value="Light Duty Truck">Light Duty Truck</option>
                                     <option value="Car" selected>Car</option>
-                                    <option value="Biofuel Car">Biofuel Car</option>
-                                    <option value="Biofuel E85 Car">Biofuel E85 Car</option>
-                                    <option value="Biofuel Truck">Biofuel Truck</option>
                                 </select></div>`
                         }
                         else if (propertyValue === 'Light Duty Truck') {
                             cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
                                     <option value="Light Duty Truck" selected>Light Duty Truck</option>
                                     <option value="Car">Car</option>
-                                    <option value="Biofuel Car">Biofuel Car</option>
-                                    <option value="Biofuel E85 Car">Biofuel E85 Car</option>
-                                    <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select></div>`
-                        }
-                        else if (propertyValue === 'Biofuel Car') {
-                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
-                                    <option value="Light Duty Truck">Light Duty Truck</option>
-                                    <option value="Car">Car</option>
-                                    <option value="Biofuel Car" selected>Biofuel Car</option>
-                                    <option value="Biofuel E85 Car">Biofuel E85 Car</option>
-                                    <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select></div>`
-                        }
-                        else if (propertyValue === 'Biofuel E85 Car') {
-                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
-                                    <option value="Light Duty Truck">Light Duty Truck</option>
-                                    <option value="Car">Car</option>
-                                    <option value="Biofuel Car">Biofuel Car</option>
-                                    <option value="Biofuel E85 Car" selected>Biofuel E85 Car</option>
-                                    <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select></div>`
-                        }
-                        else if (propertyValue === 'Biofuel Truck') {
-                            cell.innerHTML = `<div class="aui-td"><select name="${propertyName}" class="input-select-type">
-                                    <option value="Light Duty Truck">Light Duty Truck</option>
-                                    <option value="Car">Car</option>
-                                    <option value="Biofuel Car">Biofuel Car</option>
-                                    <option value="Biofuel E85 Car" selected>Biofuel E85 Car</option>
-                                    <option value="Biofuel Truck" selected>Biofuel Truck</option>
                                 </select></div>`
                         }
                     }
                     else if (propertyName.startsWith('year') || propertyName.startsWith('annual') || propertyName.startsWith('quantity') || propertyName.startsWith('annual-fuel')) {
+                        if (propertyName.startsWith('year')) {
+                            cell.setAttribute('data-title', 'Year');
+                        }
+                        else if (propertyName.startsWith('annual-vk')) {
+                            cell.setAttribute('data-title', 'Annual VKT');
+                        }
+                        else if (propertyName.startsWith('quantity')) {
+                            cell.setAttribute('data-title', 'Quantity');
+                        }
+                        else {
+                            cell.setAttribute('data-title', 'Annual Fuel');
+                        }
                         cell.innerHTML = `<div class="aui-td"><input type="number" name="${propertyName}" value="${propertyValue}"></div>`;
                     }
                     else {
+                        if (propertyName.startsWith('description')) {
+                            cell.setAttribute('data-title', 'Description');
+                        }
+                        else if (propertyName.startsWith('make')) {
+                            cell.setAttribute('data-title', 'Make');
+                        }
+                        else {
+                            cell.setAttribute('data-title', 'Model');
+                        }
                         cell.innerHTML = `<div class="aui-td"><input type="text" name="${propertyName}" value="${propertyValue}"></div>`;
                     }
                 }
@@ -368,15 +357,17 @@ const loadData = () => {
         reader.readAsText(file);
     }
 
-    document.querySelector('.calculate').scrollIntoView();
+    setTimeout(() => {
+        document.querySelector('.calculate')?.scrollIntoView();
+    }, 100)
 }
 
 /**
- * The function calculates options based on user values for type, flex fuel, and fuel type.
- * @param userValues - An object containing the user's input values for the type of vehicle, whether it
- * is flex fuel capable, and the fuel type.
- * @returns An array of options based on the user values.
- */
+* The function calculates options based on user values for type, flex fuel, and fuel type.
+* @param userValues - An object containing the user's input values for the type of vehicle, whether it
+* is flex fuel capable, and the fuel type.
+* @returns An array of options based on the user values.
+*/
 const calculateOptions = (userValues) => {
     const type = getTypeValue(userValues);
     const flexFuel = getFlexFuelValue(userValues);
