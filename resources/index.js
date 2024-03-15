@@ -784,7 +784,18 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
 }
 
 
-
+const getFactor = (fuelType) => {
+    switch (fuelType) {
+        case 'Gasoline':
+            return 2299;
+        case 'E10 Gasoline':
+            return 2071;
+        case 'Diesel':
+            return 2730;
+        default:
+            return 0; // Default value if fuel type not recognized
+    }
+}
 function createComparisonGraph(emissionsIntensity) {
     // Retrieve data for the selected vehicle
     var selectedVehicleEmissionsIntensity = emissionsIntensity;
