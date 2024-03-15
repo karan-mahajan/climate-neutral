@@ -12,6 +12,8 @@
     <script src="./resources/index.js"></script>
     <link href="./resources/index.css" type="text/css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -40,54 +42,12 @@
                 <div class="data-action-save">
 
                     <input type="file" id="fileInput" class="file-input" accept=".json" onchange="loadData(this.files)">
-                    <button class="save-data" onclick="saveData()">Save Data</button>
+                    <button class="save-data d-flex align-items-center justify-content-center" onclick="saveData()">Save
+                        Data <span class="material-symbols-outlined">
+                            download
+                        </span></button>
                 </div>
             </div>
-            <!-- <div class="table-container">
-                <table id="user-details-table">
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Type</th>
-                            <th>Year</th>
-                            <th>Make</th>
-                            <th>Model</th>
-                            <th>Annual VKT</th>
-                            <th>Annual Fuel</th>
-                            <th style="text-align: left !important;">Fuel Type</th>
-                            <th style="text-align: left !important;">Flex-Fuel</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" name="description10"></td>
-                            <td><select name="type11" class="input-select-type">
-                                    <option value="Light Duty Truck" selected>Light Duty Truck</option>
-                                    <option value="Car">Car</option>
-                                    <option value="Biofuel Car">Biofuel Car</option>
-                                    <option value="Biofuel E85 Car">Biofuel E85 Car</option>
-                                    <option value="Biofuel Truck">Biofuel Truck</option>
-                                </select></td>
-                            <td><input type="number" name="year12"></td>
-                            <td><input type="text" name="make13"></td>
-                            <td><input type="text" name="model14"></td>
-                            <td><input type="number" name="annual-vkt15"></td>
-                            <td><input type="number" name="annual-fuel16"></td>
-                            <td><select name="fuel-type17" class="input-select-fuel-type">
-                                    <option value="Gasoline">Gasoline</option>
-                                    <option value="E10 Gasoline">E10 Gasoline</option>
-                                    <option value="Diesel">Diesel</option>
-                                </select></td>
-                            <td><select name="flex-fuel18" class="input-select">
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select></td>
-                            <td><input type="number" name="quantity19"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> -->
             <table class="status-table" id="user-details-table">
                 <thead>
                     <tr>
@@ -116,7 +76,7 @@
                             <div class="aui-th">Fuel Type</div>
                         </th>
                         <th scope="col">
-                            <div class="aui-th">Fuel Fuel</div>
+                            <div class="aui-th">Flex Fuel</div>
                         </th>
                         <th scope="col">
                             <div class="aui-th">Quantity</div>
@@ -171,24 +131,34 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="add-row" onclick="addNewRow()">Add New Row</button>
-            <button class="calculate" onclick="calculate()">Calculate</button>
+            <button class="add-row d-flex align-items-center justify-content-center" onclick="addNewRow()"> <span
+                    class="material-symbols-outlined">
+                    add
+                </span>Add New Row</button>
+            <button class="calculate d-flex align-items-center justify-content-center" onclick="calculate()">Calculate
+                <span class="material-symbols-outlined">
+                    calculate
+                </span></button>
         </div>
     </div>
     <div class="container chart">
         <div class="green-wizard" style="display: none;">
             <div class="green-wizard-header">
-                <span>
-                    Fleet Vehicle
+                <span class="d-flex align-items-center justify-content-center">
+                    Fleet Vehicle <span class="material-symbols-outlined ml-2">
+                        local_shipping
+                    </span>
                 </span>
-                <span>
-                    Green Option
+                <span class="d-flex align-items-center justify-content-center">
+                    Green Option <span class="material-symbols-outlined ml-2">
+                        list
+                    </span>
                 </span>
             </div>
         </div>
-        <button class="btn-emission-result" style="display: none;" onclick="showEmissions()">Show Current Emissions
-            Result</button>
     </div>
+    <button class="btn-emission-result" style="display: none;" onclick="showEmissions()">Show Current Emissions
+        Result</button>
     <div class="emission-container display-none">
         <div class="emission-bar-graphs">
             <div id='annual-emission'></div>
