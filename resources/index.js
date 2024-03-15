@@ -730,16 +730,97 @@ const showEmissions = () => {
     document.querySelector('.btn-saving-result').classList.remove('display-none');
 }
 
+const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmission) => {
+    var electricalEfficiency;
+    var percentageSavings;
+    var totalEmissionSavings;
+    switch (dropdownValue) {
+        case 'Replace w/ EV Light Duty Truck':
+            electricalEfficiency = 3.3 * 8.9;
+            break;
+        case 'Replace w/ EV Car':
+            electricalEfficiency = 3 * 8.9;
+            break;
+        case 'Replace w/ EV Vehicle':
+            electricalEfficiency = 3.2 * 8.9;
+            break;
+        case 'Right Size to Car':
+            const avgICEintensityDatabase = 3;
+            percentageSavings = (emissionsIntensity - avgICEintensityDatabase) / emissionsIntensity * 100;
+            totalEmissionSavings = ((annualEmission * percentageSavings) / 1000000).toFixed(2);
+            return {
+                totalEmissionSavings,
+                percentageSavings
+            }
+        case 'E85 Ethanol Usage':
+            percentageSavings = 79;
+            totalEmissionSavings = (annualEmission * 0.80) / 1000000;
+            return {
+                totalEmissionSavings,
+                percentageSavings
+            }
+
+        case 'B20 Diesel Usage':
+            percentageSavings = 15;
+            totalEmissionSavings = '';
+            return {
+                totalEmissionSavings,
+                percentageSavings
+            }
+
+        default:
+            electricalEfficiency = 0;
+    }
+    const coefficientValue = localStorage.getItem("intensity");
+    const evEmissionIntensity = electricalEfficiency / 100 * coefficientValue;
+    const intialpercentageSavings = (emissionsIntensity - evEmissionIntensity) / emissionsIntensity;
+    percentageSavings = intialpercentageSavings * 100;
+    totalEmissionSavings = ((intialpercentageSavings * annualEmission) / 1000000).toFixed(2);
+    const values = {
+        totalEmissionSavings,
+        percentageSavings
+    }
+    return values
+}
+
+
+
+function createComparisonGraph(emissionsIntensity) {
+    // Retrieve data for the selected vehicle
+    var selectedVehicleEmissionsIntensity = emissionsIntensity;
+
+    // Create dummy data for comparison (replace this with actual data)
+    var comparisonLabels = ['Existing Vehicle', 'Vehicle 2', 'Vehicle 3', 'Vehicle 4', 'Vehicle 5', 'Vehicle 6', 'Vehicle 7', 'Vehicle 8', 'Vehicle 9', 'Vehicle 10'];
+    var comparisonData = [selectedVehicleEmissionsIntensity, 2.5, 3.0, 3.2, 2.8, 3.5, 2.9, 3.1, 2.7, 3.3];
+    // Display the comparison graph
+    var comparisonGraphCtx = document.getElementById('comparisonGraph').getContext('2d');
+    var comparisonGraph = new Chart(comparisonGraphCtx, {
+        type: 'bar',
+        data: {
+            labels: comparisonLabels,
+            datasets: [{
+                label: 'Emissions Intensity Comparison (gCO2e/km)',
+                data: comparisonData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
 
 const showSavings = () => {
     var data = [];
     var containers = document.querySelectorAll('.green-wizard-container');
+    const coefficientValue = localStorage.getItem("intensity");
 
-    containers.forEach(function (container, index) {
-        var resultText = container.querySelector('.green-wizard-result p').textContent;
-        var dropdownValue = container.querySelector('select').value;
-        data.push({ fleetVehicle: resultText, actionApplied: dropdownValue, emissionSavings: '344', savingsPercentage: '80-83%' });
-    });
     var parentElement = document.querySelector('.action-savings-wizard');
 
     if (parentElement) {
