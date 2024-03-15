@@ -820,6 +820,11 @@ const showSavings = () => {
     var data = [];
     var containers = document.querySelectorAll('.green-wizard-container');
     const coefficientValue = localStorage.getItem("intensity");
+    containers.forEach(function (container, index) {
+        var resultText = container.querySelector('.green-wizard-result p').textContent;
+        var dropdownValue = container.querySelector('select').value;
+        //add rest calculations here
+    });
 
     var parentElement = document.querySelector('.action-savings-wizard');
 
