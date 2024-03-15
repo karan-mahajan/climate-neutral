@@ -784,7 +784,18 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
 }
 
 
-
+const getFactor = (fuelType) => {
+    switch (fuelType) {
+        case 'Gasoline':
+            return 2299;
+        case 'E10 Gasoline':
+            return 2071;
+        case 'Diesel':
+            return 2730;
+        default:
+            return 0; // Default value if fuel type not recognized
+    }
+}
 function createComparisonGraph(emissionsIntensity) {
     // Retrieve data for the selected vehicle
     var selectedVehicleEmissionsIntensity = emissionsIntensity;
@@ -823,7 +834,13 @@ const showSavings = () => {
     containers.forEach(function (container, index) {
         var resultText = container.querySelector('.green-wizard-result p').textContent;
         var dropdownValue = container.querySelector('select').value;
-        //add rest calculations here
+        const annualFuel = getAnnualFuelValue(userData[index]);
+        const annualEmission = annualFuel * getFactor(getFuelTypeValue(userData[index]));
+        const emissionsIntensity = annualEmission / getAnnualKmValue(userData[index]);
+        const emissionValues = calculateEmissionSavings(dropdownValue, emissionsIntensity, annualEmission);
+        data.push({ fleetVehicle: resultText, actionApplied: dropdownValue, emissionSavings: emissionValues.totalEmissionSavings, savingsPercentage: emissionValues.percentageSavings });
+        if (dropdownValue === 'Right Size to Car')
+            createComparisonGraph(index, emissionsIntensity);
     });
 
     var parentElement = document.querySelector('.action-savings-wizard');
