@@ -706,6 +706,10 @@ const calculateTotalEmissions = (vehicleValues) => {
     Plotly.newPlot('vehicle-emission', vehicleData, vehiclelayout, { displaylogo: false });
 }
 
+/**
+ * The function `showEmissions` collects data from elements on a webpage, calculates total emissions
+ * based on the collected data, and then displays the results.
+ */
 const showEmissions = () => {
     const currentValues = [];
     const greenWizardValues = document.querySelectorAll('.green-wizard-container');
@@ -788,6 +792,19 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
 }
 
 
+/**
+ * The function `getFactor` returns a specific factor value based on the input fuel type.
+ * @param fuelType - The `fuelType` parameter in the `getFactor` function represents the type of fuel
+ * for which you want to retrieve a specific factor value. The function uses a `switch` statement to
+ * determine the factor based on the provided `fuelType`. The function returns a numerical factor value
+ * corresponding to the input
+ * @returns The function `getFactor` returns a factor value based on the input `fuelType`. The factor
+ * values returned are:
+ * - For 'Gasoline': 2299
+ * - For 'E10 Gasoline': 2071
+ * - For 'Diesel': 2730
+ * - For any other fuel type not recognized: 0
+ */
 const getFactor = (fuelType) => {
     switch (fuelType) {
         case 'Gasoline':
@@ -800,6 +817,8 @@ const getFactor = (fuelType) => {
             return 0; // Default value if fuel type not recognized
     }
 }
+
+
 function createComparisonGraph(emissionsIntensity) {
     // Retrieve data for the selected vehicle
     var selectedVehicleEmissionsIntensity = emissionsIntensity;
@@ -894,6 +913,9 @@ const printResult = () => {
 }
 
 
+/**
+ * The `saveResult` function saves the content of an HTML element as a PDF file using html2pdf library.
+ */
 const saveResult = () => {
     var element = document.getElementById('save-content');
     var opt = {
