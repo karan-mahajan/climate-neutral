@@ -7,6 +7,7 @@ const userData = [];
 */
 const startCar = (e) => {
     showFooter();
+    document.getElementById('footer').style.display = 'block';
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
     const start = document.querySelector('.start-car');
@@ -112,6 +113,7 @@ function scrollFunction() {
 * "user-details-table", and adds a new row to the table.
 */
 const goToTop = () => {
+    location.reload();
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
     var table = document.getElementById("user-details-table");
