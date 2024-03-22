@@ -7,6 +7,7 @@
 
 body {
     overflow-x: hidden;
+    padding-bottom: 60px;
 }
 
 header {
@@ -914,8 +915,16 @@ a[data-title="Reset axes"] {
         top: 0;
     }
 }
+.footer button {
+    position: absolute; 
+    top: 50%; 
+    right: 10px; 
+    transform: translateY(-50%); 
+    padding: 5px 10px; 
+    font-size: 14px; 
+}
 .footer {
-    position: relative;
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -923,7 +932,7 @@ a[data-title="Reset axes"] {
     color: #fff;
     text-align: center;
     padding: 10px 0;
-    display: none;
+    font-size: 15px;
 }
 
 th:nth-child(3),
