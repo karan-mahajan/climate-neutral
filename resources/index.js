@@ -25,13 +25,11 @@ const startCar = (e) => {
         start.innerHTML = 'Stop the Car';
         car.style.animationPlayState = 'running';
     }
-}
-
-function showFooter() {
     var footer = document.getElementById("footer");
     footer.style.display = "block"; // Show the footer
 
 }
+
 /**
 * The function `displayConsumptionIntensity` retrieves the selected province from a dropdown menu,
 * finds the corresponding data for that province, and updates the DOM with the consumption intensity
