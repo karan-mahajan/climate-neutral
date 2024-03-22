@@ -6,7 +6,6 @@ const userData = [];
 * loader, and starts an animation for a car.
 */
 const startCar = (e) => {
-    showFooter();
     document.getElementById('footer').style.display = 'block';
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
