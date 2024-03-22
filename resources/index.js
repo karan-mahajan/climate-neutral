@@ -6,6 +6,7 @@ const userData = [];
 * loader, and starts an animation for a car.
 */
 const startCar = (e) => {
+    showFooter();
     const loader = document.getElementById("loader-wrapper");
     loader.style.display = 'flex';
     const start = document.querySelector('.start-car');
@@ -25,6 +26,11 @@ const startCar = (e) => {
     }
 }
 
+function showFooter() {
+    var footer = document.getElementById("footer");
+    footer.style.display = "block"; // Show the footer
+
+}
 /**
 * The function `displayConsumptionIntensity` retrieves the selected province from a dropdown menu,
 * finds the corresponding data for that province, and updates the DOM with the consumption intensity
