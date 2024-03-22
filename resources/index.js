@@ -25,13 +25,11 @@ const startCar = (e) => {
         start.innerHTML = 'Stop the Car';
         car.style.animationPlayState = 'running';
     }
-}
-
-function showFooter() {
     var footer = document.getElementById("footer");
     footer.style.display = "block"; // Show the footer
 
 }
+
 /**
 * The function `displayConsumptionIntensity` retrieves the selected province from a dropdown menu,
 * finds the corresponding data for that province, and updates the DOM with the consumption intensity
@@ -788,9 +786,14 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
     const intialpercentageSavings = (emissionsIntensity - evEmissionIntensity) / emissionsIntensity;
     percentageSavings = intialpercentageSavings * 100;
     percentageSavings = Math.round(percentageSavings);
-    const lowerBound = percentageSavings - 1;
-    const upperBound = percentageSavings + 1;
-    percentageSavings = `${lowerBound}-${upperBound}%`;
+    if (percentageSavings < 99) {
+        const lowerBound = percentageSavings - 1;
+        const upperBound = percentageSavings + 1;
+        percentageSavings = `${lowerBound}-${upperBound}%`;
+    }
+    else {
+        percentageSavings = `${percentageSavings}%`;
+    }
     totalEmissionSavings = ((intialpercentageSavings * annualEmission) / 1000000).toFixed(2);
     const values = {
         totalEmissionSavings,
@@ -930,7 +933,7 @@ const saveResult = () => {
         margin: [5, 10, 5, 10],
         filename: 'emissionresults.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 1, useCORS: true, backgroundColor: null },
+        html2canvas: { scale: 1, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
