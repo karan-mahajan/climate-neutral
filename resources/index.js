@@ -6,15 +6,11 @@ const userData = [];
 * loader, and starts an animation for a car.
 */
 const startCar = (e) => {
-    showFooter();
     document.getElementById('footer').style.display = 'block';
-    const loader = document.getElementById("loader-wrapper");
-    loader.style.display = 'flex';
     const start = document.querySelector('.start-car');
     const table = document.querySelector('.table-cont');
     table.classList.remove('display-none');
     fetchEmissionCoefficient();
-    loader.style.display = 'none';
     var car = document.querySelector('.car');
     // car.style.animation = 'run 10s linear infinite';
     if (start.innerHTML == 'Stop the Car') {
@@ -403,8 +399,6 @@ const calculateOptions = (userValues) => {
 * based on the data.
 */
 const calculate = () => {
-    const loader = document.getElementById("loader-wrapper");
-    loader.style.display = 'flex';
     var table = document.getElementById("user-details-table")
     var data = [];
     var isValid = true;
@@ -440,14 +434,19 @@ const calculate = () => {
             addGreenWizardContainer(greenOptionsWizard[i], options, i);
             i++;
         });
-        const greenWizard = document.querySelector('.green-wizard');
-        greenWizard.style.display = "flex";
-        greenWizard.scrollIntoView();
+        const loader = document.querySelector('.wrapper');
+        loader.classList.remove('display-none');
+        setTimeout(() => {
+            const loader = document.querySelector('.wrapper');
+            loader.classList.add('display-none');
+            const greenWizard = document.querySelector('.green-wizard');
+            greenWizard.style.display = "flex";
+            greenWizard.scrollIntoView();
+        }, 1500)
     }
     else {
         alert('Please provide all the values');
     }
-    loader.style.display = 'none';
 }
 
 /**
@@ -491,7 +490,7 @@ const addGreenWizardContainer = (resultText, options, index) => {
     container.appendChild(dropdownContainer);
 
     document.getElementsByClassName('green-wizard')[0].appendChild(container);
-    document.querySelector('.btn-emission-result').style.display = 'block'
+    document.querySelector('.button-emission-result').style.display = 'block'
 }
 
 /**
@@ -731,9 +730,15 @@ const showEmissions = () => {
     })
 
     calculateTotalEmissions(currentValues);
-    document.querySelector('.emission-container').classList.remove('display-none');
-    document.querySelector('.btn-saving-result').classList.remove('display-none');
-    document.querySelector('.btn-saving-result').scrollIntoView();
+    const loader = document.querySelector('.wrapper');
+    loader.classList.remove('display-none');
+    setTimeout(() => {
+        const loader = document.querySelector('.wrapper');
+        loader.classList.add('display-none');
+        document.querySelector('.emission-container').classList.remove('display-none');
+        document.querySelector('.button-saving-result').classList.remove('display-none');
+        document.querySelector('.button-saving-result').scrollIntoView();
+    }, 1500)
 }
 
 const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmission) => {
@@ -764,7 +769,7 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
             }
         case 'E85 Ethanol Usage':
             percentageSavings = 79;
-            totalEmissionSavings = (annualEmission * 0.80) / 1000000;
+            totalEmissionSavings = ((annualEmission * 0.80) / 1000000).toFixed(2);
             return {
                 totalEmissionSavings,
                 percentageSavings
@@ -909,14 +914,20 @@ const showSavings = () => {
         savingsPercentageDiv.textContent = item.savingsPercentage;
         containerBody.appendChild(savingsPercentageDiv);
     });
-    document.querySelector('.savings-chart').classList.remove('display-none');
-    document.querySelector('.chart-container').classList.remove('display-none');
-    document.querySelector('.save-buttons').classList.remove('display-none');
-    document.querySelector('.save-buttons').classList.add('d-flex');
-    if (document.querySelector('.chart-container'))
-        document.querySelector('.chart-container').scrollIntoView();
-    else
-        document.querySelector('.savings-chart').scrollIntoView();
+    const loader = document.querySelector('.wrapper');
+    loader.classList.remove('display-none');
+    setTimeout(() => {
+        const loader = document.querySelector('.wrapper');
+        loader.classList.add('display-none');
+        document.querySelector('.savings-chart').classList.remove('display-none');
+        document.querySelector('.chart-container').classList.remove('display-none');
+        document.querySelector('.save-buttons').classList.remove('display-none');
+        document.querySelector('.save-buttons').classList.add('d-flex');
+        if (document.querySelector('.chart-container'))
+            document.querySelector('.chart-container').scrollIntoView();
+        else
+            document.querySelector('.savings-chart').scrollIntoView();
+    }, 1500)
 }
 
 const printResult = () => {
