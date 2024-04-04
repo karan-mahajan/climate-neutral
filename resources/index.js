@@ -1,5 +1,7 @@
 const provinceData = [];
 const userData = [];
+const oldEmissions = [];
+const newEmissions = [];
 
 /**
 * The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
@@ -387,7 +389,7 @@ const calculateOptions = (userValues) => {
         return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
     }
     else if (type === 'Light Duty Truck' && flexFuel === 'Yes' && fuelType === 'Diesel') {
-        return ['B20 Diesel Usage', 'Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
+        return ['B20 Biodiesel Usage', 'Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
     }
     else {
         return ['Replace w/ EV Vehicle', 'Right-size to smaller vehicle', 'E85 Ethanol Usage', 'B20 Biodiesel Usage', 'Replace w/ Biofuel car', 'Replace w/ Biofuel Truck', 'Nothing'];
@@ -621,17 +623,19 @@ const getAnnualKmValue = (value) => {
         }
     }
 }
+
 const calculateTotalEmissions = (vehicleValues) => {
     const annualEmissionName = [];
     const annualEmissionValues = [];
     const vehicleEmissionValues = [];
-    const coefficientValue = localStorage.getItem("intensity");
+    const hoverName = [];
     vehicleValues.map((vechile, index) => {
         const description = getDescriptionValue(userData[index]);
         const annualFuel = getAnnualFuelValue(userData[index]);
         annualEmissionName.push(description);
-        annualEmissionValues.push(annualFuel * coefficientValue);
-        vehicleEmissionValues.push((annualFuel * coefficientValue) / getAnnualKmValue(userData[index]))
+        hoverName.push(`${getDescriptionValue(userData[index])} - ${getTypeValue(userData[index])} - ${getYearValue(userData[index])} - ${getMakeValue(userData[index])} - ${getModelValue(userData[index])}`)
+        annualEmissionValues.push((annualFuel * getFactor(getFuelTypeValue(userData[index]))) / 1000000);
+        vehicleEmissionValues.push((annualFuel * getFactor(getFuelTypeValue(userData[index])) / getAnnualKmValue(userData[index])).toFixed(2))
     })
     const annualData = [
         {
@@ -639,22 +643,20 @@ const calculateTotalEmissions = (vehicleValues) => {
             x: annualEmissionValues,
             type: 'bar',
             orientation: 'h',
+            text: annualEmissionValues,
+            hoverinfo: 'none',
             marker: {
-                color: '#0c1c81',
-                line: {
-                    color: '#5caaff',
-                    width: 1.5
-                }
+                color: '#304D6D',
             },
             width: Array.from({ length: annualEmissionName.length }, () => 0.5),
             bargap: 0.2,
         }
     ];
     const annuallayout = {
-        title: 'Total Emissions by Vehicle',
+        title: 'Total Emissions by Vehicle (In Tons)',
         font: {
-            color: '#5caaff',
-            size: 16
+            color: '#304D6D',
+            size: 24
         },
         yaxis: {
             side: 'left',
@@ -668,6 +670,7 @@ const calculateTotalEmissions = (vehicleValues) => {
             showticklabels: false,
         },
         width: 600,
+        barcornerradius: 8
     }
 
     const vehicleData = [
@@ -676,12 +679,10 @@ const calculateTotalEmissions = (vehicleValues) => {
             x: vehicleEmissionValues,
             type: 'bar',
             orientation: 'h',
+            text: vehicleEmissionValues,
+            hoverinfo: 'none',
             marker: {
-                color: '#26b170',
-                line: {
-                    color: '#5caaff',
-                    width: 1.5
-                }
+                color: '#A7CCED',
             },
             width: Array.from({ length: annualEmissionName.length }, () => 0.5),
             bargap: 0.2,
@@ -690,8 +691,8 @@ const calculateTotalEmissions = (vehicleValues) => {
     const vehiclelayout = {
         title: 'Emission Intensity by Vehicle',
         font: {
-            color: '#5caaff',
-            size: 16
+            color: '#272635',
+            size: 24
         },
         yaxis: {
             side: 'left',
@@ -705,6 +706,7 @@ const calculateTotalEmissions = (vehicleValues) => {
             showticklabels: false,
         },
         width: 600,
+        barcornerradius: 10
     }
 
     Plotly.newPlot('annual-emission', annualData, annuallayout, { displaylogo: false });
@@ -741,43 +743,47 @@ const showEmissions = () => {
     }, 1500)
 }
 
-const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmission) => {
+const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmission, annualFuel, annualKM) => {
     var electricalEfficiency;
     var percentageSavings;
     var totalEmissionSavings;
     switch (dropdownValue) {
         case 'Replace w/ EV Light Duty Truck':
-            electricalEfficiency = 3.3 * 8.9;
+            electricalEfficiency = (annualFuel / annualKM) * 8.9;
             break;
         case 'Replace w/ EV Car':
-            electricalEfficiency = 3 * 8.9;
+            electricalEfficiency = (annualFuel / annualKM) * 8.9;
             break;
         case 'Replace w/ EV Vehicle':
-            electricalEfficiency = 3.2 * 8.9;
+            electricalEfficiency = (annualFuel / annualKM) * 8.9;
             break;
         case 'Right Size to Car':
-            const avgICEintensityDatabase = 3;
-            percentageSavings = (emissionsIntensity - avgICEintensityDatabase) / emissionsIntensity * 100;
-            totalEmissionSavings = ((annualEmission * percentageSavings) / 1000000).toFixed(2);
-            percentageSavings = Math.round(percentageSavings);
-            const lowerBound = percentageSavings - 1;
-            const upperBound = percentageSavings + 1;
-            percentageSavings = `${lowerBound}-${upperBound}%`;
-            return {
-                totalEmissionSavings,
-                percentageSavings
-            }
+            electricalEfficiency = (annualFuel / annualKM) * 8.9;
+            break;
+        case 'Right-Size to smaller vehicle':
+            electricalEfficiency = (annualFuel / annualKM) * 8.9;
+            break;
         case 'E85 Ethanol Usage':
             percentageSavings = 79;
             totalEmissionSavings = ((annualEmission * 0.80) / 1000000).toFixed(2);
+            const lowerBoundE85 = percentageSavings - 1;
+            const upperBoundE85 = percentageSavings + 1;
+            percentageSavings = `${lowerBoundE85}-${upperBoundE85}%`;
+            oldEmissions.push(annualEmission)
+            newEmissions.push(0.80 * annualEmission);
             return {
                 totalEmissionSavings,
                 percentageSavings
             }
 
-        case 'B20 Diesel Usage':
+        case 'B20 Biodiesel Usage':
             percentageSavings = 15;
-            totalEmissionSavings = '';
+            totalEmissionSavings = ((annualEmission * 0.15) / 1000000).toFixed(2);
+            const lowerBoundB20 = percentageSavings - 1;
+            const upperBoundB20 = percentageSavings + 1;
+            percentageSavings = `${lowerBoundB20}-${upperBoundB20}%`;
+            oldEmissions.push(annualEmission)
+            newEmissions.push(0.15 * annualEmission);
             return {
                 totalEmissionSavings,
                 percentageSavings
@@ -787,7 +793,7 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
             electricalEfficiency = 0;
     }
     const coefficientValue = localStorage.getItem("intensity");
-    const evEmissionIntensity = electricalEfficiency / 100 * coefficientValue;
+    const evEmissionIntensity = electricalEfficiency * coefficientValue;
     const intialpercentageSavings = (emissionsIntensity - evEmissionIntensity) / emissionsIntensity;
     percentageSavings = intialpercentageSavings * 100;
     percentageSavings = Math.round(percentageSavings);
@@ -800,6 +806,8 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
         percentageSavings = `${percentageSavings}%`;
     }
     totalEmissionSavings = ((intialpercentageSavings * annualEmission) / 1000000).toFixed(2);
+    oldEmissions.push(annualEmission)
+    newEmissions.push(intialpercentageSavings * annualEmission);
     const values = {
         totalEmissionSavings,
         percentageSavings
@@ -835,55 +843,59 @@ const getFactor = (fuelType) => {
 }
 
 
-function createComparisonGraph(emissionsIntensity) {
-    // Retrieve data for the selected vehicle
-    var selectedVehicleEmissionsIntensity = emissionsIntensity;
+// function createComparisonGraph(emissionsIntensity) {
+//     // Retrieve data for the selected vehicle
+//     var selectedVehicleEmissionsIntensity = emissionsIntensity;
 
-    // Create dummy data for comparison (replace this with actual data)
-    var comparisonLabels = ['Existing Vehicle', 'Vehicle 2', 'Vehicle 3', 'Vehicle 4', 'Vehicle 5', 'Vehicle 6', 'Vehicle 7', 'Vehicle 8', 'Vehicle 9', 'Vehicle 10'];
-    var comparisonData = [selectedVehicleEmissionsIntensity, 2.5, 3.0, 3.2, 2.8, 3.5, 2.9, 3.1, 2.7, 3.3];
-    const vehicleData = [
-        {
-            x: comparisonLabels,
-            y: comparisonData,
-            type: 'bar',
-            marker: {
-                color: 'rgba(75, 192, 192, 0.2)',
-                line: {
-                    color: '#rgba(75, 192, 192, 1)',
-                    width: 1.5
-                }
-            },
-            width: Array.from({ length: comparisonData.length }, () => 0.5),
-            bargap: 0.2,
-        }
-    ];
-    const vehiclelayout = {
-        title: 'Emissions Intensity Comparison (gCO2e/km)',
-        font: {
-            color: '#5caaff',
-            size: 16
-        },
-        width: 700,
-    }
+//     // Create dummy data for comparison (replace this with actual data)
+//     var comparisonLabels = ['Existing Vehicle', 'Vehicle 2', 'Vehicle 3', 'Vehicle 4', 'Vehicle 5', 'Vehicle 6', 'Vehicle 7', 'Vehicle 8', 'Vehicle 9', 'Vehicle 10'];
+//     var comparisonData = [selectedVehicleEmissionsIntensity, 2.5, 3.0, 3.2, 2.8, 3.5, 2.9, 3.1, 2.7, 3.3];
+//     const vehicleData = [
+//         {
+//             x: comparisonLabels,
+//             y: comparisonData,
+//             type: 'bar',
+//             marker: {
+//                 color: 'rgba(75, 192, 192, 0.2)',
+//                 line: {
+//                     color: '#rgba(75, 192, 192, 1)',
+//                     width: 1.5
+//                 }
+//             },
+//             width: Array.from({ length: comparisonData.length }, () => 0.5),
+//             bargap: 0.2,
+//         }
+//     ];
+//     const vehiclelayout = {
+//         title: 'Emissions Intensity Comparison (gCO2e/km)',
+//         font: {
+//             color: '#5caaff',
+//             size: 16
+//         },
+//         width: 700,
+//     }
 
-    Plotly.newPlot('comparisonGraph', vehicleData, vehiclelayout, { displaylogo: false });
-}
+//     Plotly.newPlot('comparisonGraph', vehicleData, vehiclelayout, { displaylogo: false });
+// }
 
 const showSavings = () => {
     var data = [];
+    var names = [];
+    var totalSavings = 0;
+    var totalEmissionsInTon = 0;
     var containers = document.querySelectorAll('.green-wizard-container');
     const coefficientValue = localStorage.getItem("intensity");
     containers.forEach(function (container, index) {
         var resultText = container.querySelector('.green-wizard-result p').textContent;
+        names.push(resultText.split('-')[0]);
         var dropdownValue = container.querySelector('select').value;
         const annualFuel = getAnnualFuelValue(userData[index]);
         const annualEmission = annualFuel * getFactor(getFuelTypeValue(userData[index]));
         const emissionsIntensity = annualEmission / getAnnualKmValue(userData[index]);
-        const emissionValues = calculateEmissionSavings(dropdownValue, emissionsIntensity, annualEmission);
+        const emissionValues = calculateEmissionSavings(dropdownValue, emissionsIntensity, annualEmission, annualFuel, getAnnualKmValue(userData[index]));
+        totalSavings += Number(emissionValues.totalEmissionSavings);
+        totalEmissionsInTon += Number(annualEmission / 1000000);
         data.push({ fleetVehicle: resultText, actionApplied: dropdownValue, emissionSavings: emissionValues.totalEmissionSavings, savingsPercentage: emissionValues.percentageSavings });
-        if (dropdownValue === 'Right Size to Car')
-            createComparisonGraph(emissionsIntensity);
     });
 
     var parentElement = document.querySelector('.action-savings-wizard');
@@ -914,13 +926,36 @@ const showSavings = () => {
         savingsPercentageDiv.textContent = item.savingsPercentage;
         containerBody.appendChild(savingsPercentageDiv);
     });
+    console.log(names);
+    var trace1 = {
+        x: names,
+        y: oldEmissions,
+        name: 'Existing Emissions',
+        type: 'bar'
+    };
+
+    var trace2 = {
+        x: names,
+        y: newEmissions,
+        name: 'New Emissions',
+        type: 'bar'
+    };
+
+    var data = [trace1, trace2];
+
+    var layout = { barmode: 'group' };
+
+    Plotly.newPlot('emission-comparison', data, layout);
+    document.querySelector('.total-emission-savings').textContent = `${totalSavings} Tonnes / Year`;
+    document.querySelector('.total-emission-percentage').textContent = `${(((totalEmissionsInTon - totalSavings) / totalEmissionsInTon) * 100).toFixed(0)} %`
     const loader = document.querySelector('.wrapper');
     loader.classList.remove('display-none');
     setTimeout(() => {
         const loader = document.querySelector('.wrapper');
         loader.classList.add('display-none');
         document.querySelector('.savings-chart').classList.remove('display-none');
-        document.querySelector('.chart-container').classList.remove('display-none');
+        document.querySelector('.total-savings-charts').classList.remove('display-none');
+        document.querySelector('.emission-comparison').classList.remove('display-none');
         document.querySelector('.save-buttons').classList.remove('display-none');
         document.querySelector('.save-buttons').classList.add('d-flex');
         if (document.querySelector('.chart-container'))
@@ -950,3 +985,7 @@ const saveResult = () => {
 
     html2pdf().from(element).set(opt).save();
 }
+
+$(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
