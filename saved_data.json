@@ -1,14 +1,14 @@
 [
   {
     "description10": "Maintaince 1",
-    "type11": "Light Duty Truck",
+    "type11": "Car",
     "year12": "2018",
     "make13": "Ford",
     "model14": "F-150",
-    "annual-vkt15": "12000",
-    "annual-fuel16": "762",
+    "annual-vkt15": "20000",
+    "annual-fuel16": "2000",
     "fuel-type17": "Gasoline",
-    "flex-fuel18": "No",
+    "flex-fuel18": "Yes",
     "quantity19": "1"
   },
   {
