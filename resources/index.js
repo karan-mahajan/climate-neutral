@@ -1,14 +1,17 @@
+
+
 const provinceData = [];
 const userData = [];
 const oldEmissions = [];
 const newEmissions = [];
+let vehiclesList = [];
+const emissionsIntensity = [];
 
 /**
 * The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
 * loader, and starts an animation for a car.
 */
-const startCar = (e) => {
-    document.getElementById('footer').style.display = 'block';
+const startCar = async (e) => {
     const start = document.querySelector('.start-car');
     const table = document.querySelector('.table-cont');
     table.classList.remove('display-none');
@@ -23,9 +26,6 @@ const startCar = (e) => {
         start.innerHTML = 'Stop the Car';
         car.style.animationPlayState = 'running';
     }
-    var footer = document.getElementById("footer");
-    footer.style.display = "block"; // Show the footer
-
 }
 
 /**
@@ -98,9 +98,9 @@ function scrollFunction() {
     const header = document.querySelector(".header");
     const sticky = header.offsetTop;
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        topButton.style.display = "block";
+        topButton.classList.remove('display-none');
     } else {
-        topButton.style.display = "none";
+        topButton.classList.add('display-none');
     }
 }
 
@@ -110,25 +110,6 @@ function scrollFunction() {
 */
 const goToTop = () => {
     location.reload();
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    var table = document.getElementById("user-details-table");
-    // Clearing the existing values
-    table.innerHTML = '<thead><tr>' +
-        '<th scope="col"><div class="aui-th">Description</div></th>' +
-        '<th scope="col"><div class="aui-th">Type</div></th>' +
-        '<th scope="col"><div class="aui-th">Year</div></th>' +
-        '<th scope="col"><div class="aui-th">Make</div></th>' +
-        '<th scope="col"><div class="aui-th">Model</div></th>' +
-        '<th scope="col"><div class="aui-th">Annual VKT</div></th>' +
-        '<th scope="col"><div class="aui-th">Annual Fuel</div></th>' +
-        '<th scope="col"><div class="aui-th">Fuel Type</div></th>' +
-        '<th scope="col"><div class="aui-th">Fuel Fuel</div></th>' +
-        '<th scope="col"><div class="aui-th">Quantity</div></th>' +
-        '</tr></thead>';
-    const tbody = document.createElement("tbody");
-    table.appendChild(tbody)
-    addNewRow(true);
 }
 
 /**
@@ -254,8 +235,8 @@ const loadData = () => {
                 '<th scope="col"><div class="aui-th">Year</div></th>' +
                 '<th scope="col"><div class="aui-th">Make</div></th>' +
                 '<th scope="col"><div class="aui-th">Model</div></th>' +
-                '<th scope="col"><div class="aui-th">Annual VKT</div></th>' +
-                '<th scope="col"><div class="aui-th">Annual Fuel</div></th>' +
+                '<th scope="col" data-toggle="tooltip" data-placement="top" title="Annual Vehicle Kilometer Traveled"><div class="aui-th">Annual VKT</div></th>' +
+                '<th scope="col" data-toggle="tooltip" data-placement="top" title="Annual Fuel Consumption"><div class="aui-th">Annual Fuel</div></th>' +
                 '<th scope="col"><div class="aui-th">Fuel Type</div></th>' +
                 '<th scope="col"><div class="aui-th">Fuel Fuel</div></th>' +
                 '<th scope="col"><div class="aui-th">Quantity</div></th>' +
@@ -385,6 +366,9 @@ const calculateOptions = (userValues) => {
     else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Gasoline') {
         return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel Car'];
     }
+    else if (type === 'Light Duty Truck' && flexFuel === 'Yes' && fuelType === 'Gasoline') {
+        return ['E85 Biofuel Usage', 'Replace w/ EV Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel Car'];
+    }
     else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Diesel') {
         return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
     }
@@ -426,9 +410,11 @@ const calculate = () => {
     if (isValid) {
         const greenOptionsWizard = []
         var i = 0;
-        const greenWizardContainer = document.querySelector('.green-wizard-container');
-        if (greenWizardContainer) {
-            greenWizardContainer.remove();
+        const greenWizardContainer = document.querySelectorAll('.green-wizard-container');
+        if (greenWizardContainer.length) {
+            greenWizardContainer.forEach((wizard) => {
+                wizard.remove();
+            })
         }
         data.map((val) => {
             greenOptionsWizard[i] = `${getDescriptionValue(val)} - ${getTypeValue(val)} - ${getYearValue(val)} - ${getMakeValue(val)} - ${getModelValue(val)}`
@@ -884,7 +870,6 @@ const showSavings = () => {
     var totalSavings = 0;
     var totalEmissionsInTon = 0;
     var containers = document.querySelectorAll('.green-wizard-container');
-    const coefficientValue = localStorage.getItem("intensity");
     containers.forEach(function (container, index) {
         var resultText = container.querySelector('.green-wizard-result p').textContent;
         names.push(resultText.split('-')[0]);
@@ -926,7 +911,6 @@ const showSavings = () => {
         savingsPercentageDiv.textContent = item.savingsPercentage;
         containerBody.appendChild(savingsPercentageDiv);
     });
-    console.log(names);
     var trace1 = {
         x: names,
         y: oldEmissions,
@@ -945,8 +929,8 @@ const showSavings = () => {
 
     var layout = { barmode: 'group' };
 
-    Plotly.newPlot('emission-comparison', data, layout);
-    document.querySelector('.total-emission-savings').textContent = `${totalSavings} Tonnes / Year`;
+    Plotly.newPlot('emission-comparison', data, layout, { displaylogo: false });
+    document.querySelector('.total-emission-savings').textContent = `${(totalSavings).toFixed(2)} Tonnes / Year`;
     document.querySelector('.total-emission-percentage').textContent = `${(((totalEmissionsInTon - totalSavings) / totalEmissionsInTon) * 100).toFixed(0)} %`
     const loader = document.querySelector('.wrapper');
     loader.classList.remove('display-none');
@@ -957,6 +941,7 @@ const showSavings = () => {
         document.querySelector('.total-savings-charts').classList.remove('display-none');
         document.querySelector('.emission-comparison').classList.remove('display-none');
         document.querySelector('.save-buttons').classList.remove('display-none');
+        document.querySelector('.show-comparison').classList.remove('display-none');
         document.querySelector('.save-buttons').classList.add('d-flex');
         if (document.querySelector('.chart-container'))
             document.querySelector('.chart-container').scrollIntoView();
@@ -989,3 +974,103 @@ const saveResult = () => {
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
+
+
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+
+// Function to suggest vehicles based on emissions data
+async function suggestVehicles(emissionThreshold, index) {
+    fetch('resources/database.json')
+        .then(response => response.json())
+        .then(jsonData => {
+            const smallCarCategories = ["Subcompact", "Compact"];
+            const filteredRecords = jsonData.records.filter(record => smallCarCategories.includes(record[4])).filter(record => parseFloat(record[13]) < emissionThreshold);
+
+            // Extract top vehicles with lowest emission intensity as suggestions
+            const suggestions = filteredRecords.map(record => {
+                return `${record[2]} ${record[3]} - ${record[13]} g/km`;
+            });
+
+
+            const shuffledArray = shuffleArray(suggestions);
+            emissionsIntensity[index].suggestions = shuffledArray.slice(0, 5);
+        })
+        .catch(error => console.error('Error fetching JSON:', error));
+}
+
+
+function createDynamicHTML(data) {
+    const container = document.getElementById('tabsTemplate1');
+    container.setAttribute('class', 'd-flex flex-wrap aui-accordion-tab2 justify-content-center');
+    container.setAttribute('role', 'tablist');
+
+    data.forEach((item, index) => {
+        // Create a button for the name
+        const button = document.createElement('button');
+        button.setAttribute('class', 'aui-acc-tab-item btn btn-text');
+        button.setAttribute('data-toggle', 'collapse');
+        button.setAttribute('data-target', `#${item.name}`);
+        button.setAttribute('aria-expanded', `${index === 0 ? 'true' : 'false'}`);
+        button.setAttribute('role', 'tab');
+        button.innerHTML = `${item.name.split('-')[0].trim()} <i class="aha-icon-arrow-down mx-2 d-inline-block d-md-none"></i>`;
+        // Append the button and the suggestions div to the container
+        container.appendChild(button);
+    });
+
+    data.forEach((item, index) => {
+        const contentDiv = document.createElement('div');
+        contentDiv.setAttribute('id', item.name);
+        contentDiv.setAttribute('class', `collapse ${index === 0 ? 'show' : ''} row w-100 no-gutters aui-accordion-content pt-4`);
+        contentDiv.setAttribute('data-parent', '#tabsTemplate1');
+        contentDiv.setAttribute('role', 'tabpanel');
+        const suggestionsDiv = document.createElement('div');
+        if (item.suggestions && item.suggestions.length > 0) {
+            const ul = document.createElement('ul');
+            ul.classList.add('suggestion-list');
+            item.suggestions.forEach(suggestion => {
+                const li = document.createElement('li');
+                li.innerText = suggestion;
+                ul.appendChild(li);
+            });
+            contentDiv.appendChild(ul);
+        } else {
+            contentDiv.innerHTML = '<p>No suggestions available.</p>';
+        }
+        container.appendChild(contentDiv);
+    })
+}
+
+
+
+const showReplacements = async () => {
+    const loader = document.querySelector('.wrapper');
+    loader.classList.remove('display-none');
+    var containers = document.querySelectorAll('.green-wizard-container');
+    containers.forEach(function (container, index) {
+        var resultText = container.querySelector('.green-wizard-result p').textContent;
+        var dropdownValue = container.querySelector('select').value;
+        const annualFuel = getAnnualFuelValue(userData[index]);
+        emissionsIntensity.push({
+            name: resultText,
+            drop: dropdownValue,
+            value: Number((annualFuel * getFactor(getFuelTypeValue(userData[index])) / getAnnualKmValue(userData[index])).toFixed(2))
+        });
+    });
+
+    emissionsIntensity.map(async (vehicleData, index) => {
+        await suggestVehicles(vehicleData.value, index);
+    })
+    setTimeout(() => {
+        createDynamicHTML(emissionsIntensity);
+        loader.classList.add('display-none');
+        document.getElementById('tabsTemplate1').scrollIntoView();
+    }, 1500)
+}
