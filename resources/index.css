@@ -7,22 +7,25 @@
 
 body {
     overflow-x: hidden;
-    padding-bottom: 60px;
+    padding-bottom: 60px !important;
 }
 
 header {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    font-size: 35px;
-    font-weight: bold;
     position: sticky;
     top: 0;
     background-color: #0c1c81;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1;
     font-style: italic;
+}
+
+header .title {
+    color: #fff;
+    font-size: 38px;
+    font-weight: bold;
 }
 
 .dash-container {
@@ -986,6 +989,10 @@ a[data-title="Reset axes"] {
     background: white;
     border-radius: 20px;
     cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 13px;
+    height: 32px;
 }
 
 .lable {
@@ -998,6 +1005,7 @@ a[data-title="Reset axes"] {
 
 .go-to-top:hover {
     background: #ff362b52;
+    color: white;
 }
 
 .go-to-top:hover .svg-icon {
@@ -1425,4 +1433,32 @@ a[data-title="Reset axes"] {
     justify-content: center;
     margin-top: 50px;
     flex-direction: column;
+}
+
+.show-comparison {
+    margin-top: 30px;
+}
+
+
+@media only screen and (min-width: 768px) {
+    .aui-accordion-tab2 .aui-acc-tab-item {
+        width: 10% !important;
+    }
+}
+
+
+.suggestion-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    list-style: none;
+    filter: drop-shadow(rgba(0, 0, 0, 0.2) 0px 0.2rem 0.4rem);
+    width: auto !important;
+    margin: auto;
+    background: rgb(255, 255, 255);
+    border: 0.1rem solid rgb(236, 236, 238);
+    border-radius: 0.8rem;
+    gap: 10px;
+    padding: 20px 30px;
+    margin-top: 10px;
 }
