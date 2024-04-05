@@ -1462,3 +1462,59 @@ a[data-title="Reset axes"] {
     padding: 20px 30px;
     margin-top: 10px;
 }
+
+
+.logo {
+    font-size: 32px;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+.campus,
+.cart {
+    display: inline-block;
+    position: relative;
+    transform-style: preserve-3d;
+    font-size: 38px;
+    font-weight: 700;
+}
+
+.campus {
+    animation: campusAnimation 2s ease-in-out infinite alternate;
+}
+
+.cart {
+    animation: cartAnimation 2s ease-in-out infinite alternate;
+}
+
+@keyframes campusAnimation {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes cartAnimation {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(10px);
+    }
+}
+
+@keyframes lineAnimation {
+    0% {
+        transform: rotateY(180deg);
+    }
+
+    100% {
+        transform: rotateY(0);
+    }
+}

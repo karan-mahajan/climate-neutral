@@ -5,7 +5,7 @@ const userData = [];
 const oldEmissions = [];
 const newEmissions = [];
 let vehiclesList = [];
-const emissionsIntensity = [];
+let emissionsIntensity = [];
 
 /**
 * The `startCar` function displays a loader, shows a table, fetches an emission coefficient, hides the
@@ -238,7 +238,7 @@ const loadData = () => {
                 '<th scope="col" data-toggle="tooltip" data-placement="top" title="Annual Vehicle Kilometer Traveled"><div class="aui-th">Annual VKT</div></th>' +
                 '<th scope="col" data-toggle="tooltip" data-placement="top" title="Annual Fuel Consumption"><div class="aui-th">Annual Fuel</div></th>' +
                 '<th scope="col"><div class="aui-th">Fuel Type</div></th>' +
-                '<th scope="col"><div class="aui-th">Fuel Fuel</div></th>' +
+                '<th scope="col"><div class="aui-th">Flex Fuel</div></th>' +
                 '<th scope="col"><div class="aui-th">Quantity</div></th>' +
                 '</tr></thead>';
 
@@ -326,6 +326,9 @@ const loadData = () => {
                     else {
                         if (propertyName.startsWith('description')) {
                             cell.setAttribute('data-title', 'Description');
+                            cell.setAttribute('data-toggle', "tooltip");
+                            cell.setAttribute('data-placement', "top");
+                            cell.setAttribute('title', propertyValue);
                         }
                         else if (propertyName.startsWith('make')) {
                             cell.setAttribute('data-title', 'Make');
@@ -334,6 +337,7 @@ const loadData = () => {
                             cell.setAttribute('data-title', 'Model');
                         }
                         cell.innerHTML = `<div class="aui-td"><input type="text" name="${propertyName}" value="${propertyValue}"></div>`;
+                        $('[data-toggle="tooltip"]').tooltip();
                     }
                 }
             }
@@ -361,22 +365,22 @@ const calculateOptions = (userValues) => {
         return ['Replace w/ EV Vehicle', 'E85 Ethanol Usage'];
     }
     else if (type === 'Car' && flexFuel === 'No' && fuelType === 'Gasoline') {
-        return ['Replace w/ EV Car', 'Replace w/ Biofuel Car E85'];
+        return ['Replace w/ EV Vehicle', 'Replace w/ Biofuel Car'];
     }
     else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Gasoline') {
-        return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel Car'];
+        return ['Replace w/ EV Vehicle', 'Replace w/ Biofuel Truck', 'Right-size to smaller vehicle'];
     }
     else if (type === 'Light Duty Truck' && flexFuel === 'Yes' && fuelType === 'Gasoline') {
-        return ['E85 Biofuel Usage', 'Replace w/ EV Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel Car'];
+        return ['E85 Ethanol Usage', 'Replace w/ EV Vehicle', 'Replace w/ Biofuel Truck', 'Right-size to smaller vehicle'];
     }
     else if (type === 'Light Duty Truck' && flexFuel === 'No' && fuelType === 'Diesel') {
-        return ['Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
+        return ['Replace w/ EV Vehicle', 'Replace w/ Biofuel Truck', 'Right-size to smaller vehicle'];
     }
     else if (type === 'Light Duty Truck' && flexFuel === 'Yes' && fuelType === 'Diesel') {
-        return ['B20 Biodiesel Usage', 'Replace w/ EV Light Duty Truck', 'Replace w/ Biofuel E85 Light Duty Truck', 'Right Size to Car', 'Right Size to Biofuel E85 Car'];
+        return ['B20 Biodiesel Usage', 'Replace w/ EV Vehicle', 'Replace w/ Biofuel Truck', 'Right-size to smaller vehicle'];
     }
     else {
-        return ['Replace w/ EV Vehicle', 'Right-size to smaller vehicle', 'E85 Ethanol Usage', 'B20 Biodiesel Usage', 'Replace w/ Biofuel car', 'Replace w/ Biofuel Truck', 'Nothing'];
+        return ['Replace w/ EV Vehicle', 'Right-size to smaller vehicle', 'E85 Ethanol Usage', 'B20 Biodiesel Usage', 'Replace w/ Biofuel Truck', 'Nothing'];
     }
 }
 
@@ -734,21 +738,6 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
     var percentageSavings;
     var totalEmissionSavings;
     switch (dropdownValue) {
-        case 'Replace w/ EV Light Duty Truck':
-            electricalEfficiency = (annualFuel / annualKM) * 8.9;
-            break;
-        case 'Replace w/ EV Car':
-            electricalEfficiency = (annualFuel / annualKM) * 8.9;
-            break;
-        case 'Replace w/ EV Vehicle':
-            electricalEfficiency = (annualFuel / annualKM) * 8.9;
-            break;
-        case 'Right Size to Car':
-            electricalEfficiency = (annualFuel / annualKM) * 8.9;
-            break;
-        case 'Right-Size to smaller vehicle':
-            electricalEfficiency = (annualFuel / annualKM) * 8.9;
-            break;
         case 'E85 Ethanol Usage':
             percentageSavings = 79;
             totalEmissionSavings = ((annualEmission * 0.80) / 1000000).toFixed(2);
@@ -774,9 +763,8 @@ const calculateEmissionSavings = (dropdownValue, emissionsIntensity, annualEmiss
                 totalEmissionSavings,
                 percentageSavings
             }
-
         default:
-            electricalEfficiency = 0;
+            electricalEfficiency = (annualFuel / annualKM) * 8.9;
     }
     const coefficientValue = localStorage.getItem("intensity");
     const evEmissionIntensity = electricalEfficiency * coefficientValue;
@@ -927,7 +915,18 @@ const showSavings = () => {
 
     var data = [trace1, trace2];
 
-    var layout = { barmode: 'group' };
+    var layout = {
+        barmode: 'group', autosize: false,
+        width: 800,
+        height: 500,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 100,
+            t: 100,
+            pad: 4
+        },
+    };
 
     Plotly.newPlot('emission-comparison', data, layout, { displaylogo: false });
     document.querySelector('.total-emission-savings').textContent = `${(totalSavings).toFixed(2)} Tonnes / Year`;
@@ -1051,6 +1050,9 @@ function createDynamicHTML(data) {
 
 
 const showReplacements = async () => {
+    const suggest = document.getElementById('tabsTemplate1');
+    suggest.innerHTML = '';
+    emissionsIntensity = [];
     const loader = document.querySelector('.wrapper');
     loader.classList.remove('display-none');
     var containers = document.querySelectorAll('.green-wizard-container');
